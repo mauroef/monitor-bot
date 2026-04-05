@@ -1,0 +1,136 @@
+import type {
+  GridBotStatusResponse,
+  GridBotGridResponse,
+  TradingBotStatusResponse,
+  BotStatus,
+  Balance,
+  Order,
+  BotMetrics,
+} from '../types'
+
+/** Parse "85000 USDT" or "0.00100 BTC" → number */
+function parseAmount(value: string | number | null | undefined): number {
+  if (value == null) return 0
+  if (typeof value === 'number') return value
+  return parseFloat(value) || 0
+}
+
+export function adaptGridBotStatus(raw: GridBotStatusResponse): BotStatus {
+  return {
+    botId: 'grid',
+    botType: 'grid',
+    isActive: raw.status === 'ACTIVE',
+    status: raw.status,
+    lastUpdate: raw.generatedAt,
+    exchange: raw.exchange ?? 'binance',
+    testnet: raw.testnet ?? true,
+  }
+}
+
+export function adaptGridBotBalances(raw: GridBotGridResponse): Balance[] {
+  if (!raw.account) return []
+
+  const freeUsdt = parseAmount(raw.account.freeBalance)
+  const lockedUsdt = parseAmount(raw.account.usdtInBuys)
+  const baseAsset = raw.symbol?.replace(/USDT$/i, '') ?? 'BASE'
+  const baseInSells = parseFloat(raw.account.btcInSells) || 0
+
+  return [
+    {
+      asset: 'USDT',
+      free: freeUsdt,
+      locked: lockedUsdt,
+      total: freeUsdt + lockedUsdt,
+    },
+    {
+      asset: baseAsset,
+      free: 0,
+      locked: baseInSells,
+      total: baseInSells,
+    },
+  ]
+}
+
+export function adaptGridBotOrders(raw: GridBotGridResponse): Order[] {
+  if (!raw.levels?.detail) return []
+  return raw.levels.detail.map((l) => ({
+    id: l.orderId,
+    botType: 'grid' as const,
+    side: l.side === 'BUY' ? 'buy' : 'sell',
+    price: parseAmount(l.price),
+    quantity: parseAmount(l.qty),
+    status: 'open' as const,
+    createdAt: l.placedAt,
+  }))
+}
+
+export function adaptGridBotMetrics(
+  status: GridBotStatusResponse,
+  grid: GridBotGridResponse,
+): BotMetrics {
+  return {
+    botType: 'grid',
+    metrics: {
+      totalCycles: status.performance?.totalCycles ?? 0,
+      totalNetPnl: status.performance?.totalNetPnl ?? 0,
+      totalFees: status.performance?.totalFees ?? 0,
+      regime: status.lastRegime?.regime ?? 'unknown',
+      adx: status.lastRegime?.adx ?? 0,
+      profile: status.profile ?? '—',
+      gridLower: parseAmount(grid.grid?.lower),
+      gridUpper: parseAmount(grid.grid?.upper),
+      openLevels: grid.levels?.open ?? 0,
+    },
+  }
+}
+
+export function adaptTradingBotStatus(raw: TradingBotStatusResponse): BotStatus {
+  const isActive = (raw.openPositions?.length ?? 0) > 0 || raw.account.lastAction === 'BUY'
+  return {
+    botId: 'trading',
+    botType: 'trading',
+    isActive,
+    status: isActive ? 'ACTIVE' : 'IDLE',
+    lastUpdate: raw.generatedAt,
+    exchange: raw.config?.exchange ?? 'bybit',
+    testnet: raw.config?.testnet ?? true,
+  }
+}
+
+export function adaptTradingBotBalances(raw: TradingBotStatusResponse): Balance[] {
+  return [
+    {
+      asset: 'USDT',
+      free: raw.account.balance,
+      locked: 0,
+      total: raw.account.balance,
+    },
+  ]
+}
+
+export function adaptTradingBotOrders(raw: TradingBotStatusResponse): Order[] {
+  return raw.openPositions.map((p) => ({
+    id: p.id,
+    botType: 'trading' as const,
+    side: p.side.toLowerCase() as 'buy' | 'sell',
+    price: parseAmount(p.entryPrice),
+    quantity: parseAmount(p.qty),
+    status: 'open' as const,
+    createdAt: p.openedAt,
+  }))
+}
+
+export function adaptTradingBotMetrics(raw: TradingBotStatusResponse): BotMetrics {
+  return {
+    botType: 'trading',
+    metrics: {
+      totalTrades: raw.performance.totalTrades,
+      winners: raw.performance.winners,
+      losers: raw.performance.losers,
+      winRate: raw.performance.winRate ?? 'N/A',
+      totalNetPnl: raw.performance.totalNetPnl ?? 'N/A',
+      strategy: raw.config.strategy,
+      exchange: raw.config.exchange,
+    },
+  }
+}
