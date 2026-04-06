@@ -12,14 +12,18 @@ function LogLine({ entry }: { entry: GridLogEntry }) {
   const hasData = Object.keys(entry.data).length > 0
 
   return (
-    <div className="flex gap-2 font-mono text-xs leading-5">
-      <span className="shrink-0 text-zinc-600">{time}</span>
-      <span className={`shrink-0 w-10 font-semibold ${levelColor(entry.level)}`}>
-        {entry.level}
-      </span>
-      <span className="text-zinc-200">{entry.message}</span>
+    <div className="font-mono text-xs leading-5 py-0.5">
+      <div className="flex items-baseline gap-2 min-w-0">
+        <span className="shrink-0 text-zinc-600">{time}</span>
+        <span className={`shrink-0 w-10 font-semibold ${levelColor(entry.level)}`}>
+          {entry.level}
+        </span>
+        <span className="text-zinc-200 wrap-break-word min-w-0">{entry.message}</span>
+      </div>
       {hasData && (
-        <span className="text-zinc-500 break-all">{formatLogData(entry.data)}</span>
+        <div className="pl-0 text-zinc-500 break-all whitespace-pre-wrap">
+          {formatLogData(entry.data)}
+        </div>
       )}
     </div>
   )
