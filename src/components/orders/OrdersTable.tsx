@@ -16,7 +16,6 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-zinc-800 text-left text-xs text-zinc-500">
-                <th className="pb-2 font-medium">Bot</th>
                 <th className="pb-2 font-medium">Side</th>
                 <th className="pb-2 font-medium text-right">Price</th>
                 <th className="pb-2 font-medium text-right">Qty</th>
@@ -25,7 +24,6 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             <tbody className="divide-y divide-zinc-800/50">
               {orders.map((o) => (
                 <tr key={o.id} className="text-zinc-300">
-                  <td className="py-2 capitalize text-zinc-500">{o.botType}</td>
                   <td className="py-2">
                     <Badge variant={o.side === 'buy' ? 'green' : 'red'}>
                       {o.side.toUpperCase()}

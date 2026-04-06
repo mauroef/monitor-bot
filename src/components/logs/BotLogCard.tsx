@@ -1,9 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { Card } from '../ui/Card'
-import { Badge } from '../ui/Badge'
 import { Skeleton } from '../ui/Skeleton'
 import { useGridLogs, useTradingLogs, levelColor, formatLogData } from '../../hooks/useBotLog'
-import { useDashboard } from '../../hooks/useDashboard'
 import type { GridLogEntry } from '../../hooks/useBotLog'
 import { formatDateTime } from '../../utils/format'
 
@@ -30,16 +28,10 @@ function LogLine({ entry }: { entry: GridLogEntry }) {
 }
 
 function LogContainer({
-  title,
-  exchange,
-  testnet,
   entries,
   isLoading,
   error,
 }: {
-  title: string
-  exchange: string
-  testnet: boolean
   entries: GridLogEntry[] | undefined
   isLoading: boolean
   error: unknown
@@ -51,15 +43,8 @@ function LogContainer({
   }, [entries?.length])
 
   return (
-    <Card>
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          {exchange} · {title}
-        </h2>
-        <Badge variant={testnet ? 'yellow' : 'green'}>{testnet ? 'testnet' : 'mainnet'}</Badge>
-      </div>
-
-      <div className="overflow-y-auto rounded bg-zinc-900 px-3 py-2" style={{ maxHeight: '320px', overflowY: 'auto' }}>
+    <Card title="log">
+      <div className="overflow-y-auto rounded bg-zinc-950 px-3 py-2" style={{ maxHeight: '320px' }}>
         {isLoading ? (
           <div className="space-y-2 pt-1">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -87,34 +72,10 @@ function LogContainer({
 
 export function GridBotLogCard() {
   const { data, isLoading, error } = useGridLogs()
-  const { data: dashboard } = useDashboard()
-  const bot = dashboard?.bots.find((b) => b.botType === 'grid')
-
-  return (
-    <LogContainer
-      title="grid-bot log"
-      exchange={bot?.exchange ?? 'binance'}
-      testnet={bot?.testnet ?? true}
-      entries={data}
-      isLoading={isLoading}
-      error={error}
-    />
-  )
+  return <LogContainer entries={data} isLoading={isLoading} error={error} />
 }
 
 export function TradingBotLogCard() {
   const { data, isLoading, error } = useTradingLogs()
-  const { data: dashboard } = useDashboard()
-  const bot = dashboard?.bots.find((b) => b.botType === 'trading')
-
-  return (
-    <LogContainer
-      title="trading-bot log"
-      exchange={bot?.exchange ?? 'exchange'}
-      testnet={bot?.testnet ?? true}
-      entries={data as GridLogEntry[] | undefined}
-      isLoading={isLoading}
-      error={error}
-    />
-  )
+  return <LogContainer entries={data as GridLogEntry[] | undefined} isLoading={isLoading} error={error} />
 }

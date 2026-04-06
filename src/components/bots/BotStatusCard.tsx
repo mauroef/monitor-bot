@@ -16,20 +16,10 @@ interface BotStatusCardProps {
 
 export function BotStatusCard({ bot }: BotStatusCardProps) {
   return (
-    <Card>
+    <Card title="status">
       <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-            {bot.exchange} · {bot.botType}-bot
-          </p>
-          <p className="mt-1 text-xl font-bold text-white capitalize">{bot.botId}-bot</p>
-        </div>
-        <div className="flex flex-col items-end gap-1.5">
-          <Badge variant={statusVariant(bot.status)}>{bot.status}</Badge>
-          <Badge variant={bot.testnet ? 'yellow' : 'green'}>
-            {bot.testnet ? 'testnet' : 'mainnet'}
-          </Badge>
-        </div>
+        <p className="text-xl font-bold text-white capitalize">{bot.botId}-bot</p>
+        <Badge variant={statusVariant(bot.status)}>{bot.status}</Badge>
       </div>
       <p className="mt-3 text-xs text-zinc-500">
         Updated: {bot.lastUpdate ? formatDateTime(bot.lastUpdate) : '—'}

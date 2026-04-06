@@ -1,5 +1,6 @@
 import { useDashboard } from './hooks/useDashboard'
 import { DashboardLayout } from './components/layout/DashboardLayout'
+import { BotSection } from './components/layout/BotSection'
 import { BotStatusCard } from './components/bots/BotStatusCard'
 import { BalanceWidget } from './components/balances/BalanceWidget'
 import { GridBalanceWidget } from './components/balances/GridBalanceWidget'
@@ -33,32 +34,48 @@ export default function App() {
           ))}
         </div>
       ) : data ? (
-        <div className="space-y-6">
-          <section className="grid gap-4 sm:grid-cols-2">
-            {data.bots.map((bot) => (
-              <BotStatusCard key={bot.botId} bot={bot} />
-            ))}
-          </section>
-
-          <section className="grid gap-4 sm:grid-cols-2">
-            <GridBalanceWidget />
-            <BalanceWidget />
-          </section>
-
-          <section className="grid gap-4 sm:grid-cols-2">
-            {data.metrics.map((m) => (
-              <MetricsPanel key={m.botType} metrics={m} />
-            ))}
-          </section>
-
-          <section className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-4">
+          <BotSection
+            title="grid-bot"
+            bot={data.bots.find((b) => b.botType === 'grid')}
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              {data.bots
+                .filter((b) => b.botType === 'grid')
+                .map((bot) => (
+                  <BotStatusCard key={bot.botId} bot={bot} />
+                ))}
+              <GridBalanceWidget />
+            </div>
+            {data.metrics
+              .filter((m) => m.botType === 'grid')
+              .map((m) => (
+                <MetricsPanel key={m.botType} metrics={m} />
+              ))}
             <GridBotLogCard />
-            <TradingBotLogCard />
-          </section>
+            <OrdersTable orders={data.openOrders.filter((o) => o.botType === 'grid')} />
+          </BotSection>
 
-          <section>
-            <OrdersTable orders={data.openOrders} />
-          </section>
+          <BotSection
+            title="trading-bot"
+            bot={data.bots.find((b) => b.botType === 'trading')}
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              {data.bots
+                .filter((b) => b.botType === 'trading')
+                .map((bot) => (
+                  <BotStatusCard key={bot.botId} bot={bot} />
+                ))}
+              <BalanceWidget />
+            </div>
+            {data.metrics
+              .filter((m) => m.botType === 'trading')
+              .map((m) => (
+                <MetricsPanel key={m.botType} metrics={m} />
+              ))}
+            <TradingBotLogCard />
+            <OrdersTable orders={data.openOrders.filter((o) => o.botType === 'trading')} />
+          </BotSection>
         </div>
       ) : null}
     </DashboardLayout>

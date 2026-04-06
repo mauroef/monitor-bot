@@ -1,7 +1,5 @@
 import { useGridBalance } from '../../hooks/useGridBalance'
-import { useDashboard } from '../../hooks/useDashboard'
 import { Card } from '../ui/Card'
-import { Badge } from '../ui/Badge'
 import { Skeleton } from '../ui/Skeleton'
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -15,26 +13,12 @@ function Row({ label, value }: { label: string; value: string }) {
 
 export function GridBalanceWidget() {
   const { data: grid, isLoading, error } = useGridBalance()
-  const { data: dashboard } = useDashboard()
-
-  const gridBot = dashboard?.bots.find((b) => b.botType === 'grid')
-  const testnet = gridBot?.testnet ?? true
-  const exchange = gridBot?.exchange ?? 'binance'
 
   const notInitialized = !grid || grid.status === 'not_initialized'
   const baseAsset = grid?.symbol?.replace(/USDT$/i, '') ?? 'BASE'
 
   return (
-    <Card>
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          {exchange} · grid-bot
-        </h2>
-        <Badge variant={testnet ? 'yellow' : 'green'}>
-          {testnet ? 'testnet' : 'mainnet'}
-        </Badge>
-      </div>
-
+    <Card title="balance">
       {isLoading ? (
         <div className="space-y-3 pt-1">
           {Array.from({ length: 5 }).map((_, i) => (

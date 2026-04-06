@@ -1,7 +1,5 @@
 import { useTradingBalance } from '../../hooks/useTradingBalance'
-import { useDashboard } from '../../hooks/useDashboard'
 import { Card } from '../ui/Card'
-import { Badge } from '../ui/Badge'
 import { Skeleton } from '../ui/Skeleton'
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -15,11 +13,6 @@ function Row({ label, value }: { label: string; value: string }) {
 
 export function BalanceWidget() {
   const { data: balance, isLoading, error } = useTradingBalance()
-  const { data: dashboard } = useDashboard()
-
-  const tradingBot = dashboard?.bots.find((b) => b.botType === 'trading')
-  const testnet = tradingBot?.testnet ?? true
-  const exchange = tradingBot?.exchange ?? 'exchange'
 
   const symbol = balance?.symbol ?? 'BTCUSDT'
   const baseAsset = symbol.replace('USDT', '')
@@ -27,16 +20,7 @@ export function BalanceWidget() {
   const baseLocked = balance ? String(balance[`${baseAsset}Locked`] ?? '—') : '—'
 
   return (
-    <Card>
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          {exchange} · trading-bot
-        </h2>
-        <Badge variant={testnet ? 'yellow' : 'green'}>
-          {testnet ? 'testnet' : 'mainnet'}
-        </Badge>
-      </div>
-
+    <Card title="balance">
       {isLoading ? (
         <div className="space-y-3 pt-1">
           {Array.from({ length: 5 }).map((_, i) => (
