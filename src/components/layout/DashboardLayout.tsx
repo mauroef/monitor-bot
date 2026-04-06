@@ -1,3 +1,5 @@
+import { RefreshBar } from '../ui/RefreshBar'
+
 interface DashboardLayoutProps {
   children: React.ReactNode
 }
@@ -10,7 +12,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <h1 className="text-lg font-semibold tracking-tight">
             <span className="text-emerald-400">●</span> monitor-bot
           </h1>
-          <span className="text-xs text-zinc-500">auto-refresh 30s</span>
+          <RefreshBar />
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>

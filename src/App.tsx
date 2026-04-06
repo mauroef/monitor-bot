@@ -6,6 +6,7 @@ import { GridBalanceWidget } from './components/balances/GridBalanceWidget'
 import { OrdersTable } from './components/orders/OrdersTable'
 import { MetricsPanel } from './components/metrics/MetricsPanel'
 import { CardSkeleton } from './components/ui/Skeleton'
+import { GridBotLogCard, TradingBotLogCard } from './components/logs/BotLogCard'
 
 export default function App() {
   const { data, isLoading, errors } = useDashboard()
@@ -48,6 +49,11 @@ export default function App() {
             {data.metrics.map((m) => (
               <MetricsPanel key={m.botType} metrics={m} />
             ))}
+          </section>
+
+          <section className="grid gap-4 sm:grid-cols-2">
+            <GridBotLogCard />
+            <TradingBotLogCard />
           </section>
 
           <section>

@@ -1,6 +1,7 @@
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
 import type { BotStatus } from '../../types'
+import { formatDateTime } from '../../utils/format'
 
 const statusVariant = (status: string) => {
   if (status === 'ACTIVE') return 'green'
@@ -31,7 +32,7 @@ export function BotStatusCard({ bot }: BotStatusCardProps) {
         </div>
       </div>
       <p className="mt-3 text-xs text-zinc-500">
-        Updated: {bot.lastUpdate ? new Date(bot.lastUpdate).toLocaleTimeString() : '—'}
+        Updated: {bot.lastUpdate ? formatDateTime(bot.lastUpdate) : '—'}
       </p>
     </Card>
   )
