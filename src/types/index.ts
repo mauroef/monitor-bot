@@ -6,6 +6,7 @@ export interface BotStatus {
   isActive: boolean
   status: string
   lastUpdate: string
+  nextCycleAt?: string
   exchange: string
   testnet: boolean
 }
@@ -25,6 +26,8 @@ export interface Order {
   quantity: number
   status: 'open' | 'filled' | 'cancelled'
   createdAt: string
+  stopLoss?: number
+  takeProfit?: number
 }
 
 export interface BotMetrics {

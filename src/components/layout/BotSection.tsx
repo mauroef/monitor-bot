@@ -1,7 +1,7 @@
-import { useState } from 'react'
 import type { BotStatus } from '../../types'
 import { Badge } from '../ui/Badge'
 import { formatDateTime } from '../../utils/format'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 const statusVariant = (status: string) => {
   if (status === 'ACTIVE') return 'green'
@@ -12,18 +12,19 @@ const statusVariant = (status: string) => {
 
 interface BotSectionProps {
   title: string
+  storageKey: string
   bot?: BotStatus
   children: React.ReactNode
   defaultOpen?: boolean
 }
 
-export function BotSection({ title, bot, children, defaultOpen = true }: BotSectionProps) {
-  const [open, setOpen] = useState(defaultOpen)
+export function BotSection({ title, storageKey, bot, children, defaultOpen = true }: BotSectionProps) {
+  const [open, setOpen] = useLocalStorage(storageKey, defaultOpen)
 
   return (
     <div className="overflow-hidden rounded-xl border border-zinc-800">
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => setOpen(!open)}
         className="flex w-full items-center gap-3 bg-zinc-900 px-4 py-3 text-left transition-colors hover:bg-zinc-800/80"
       >
         <svg

@@ -21,9 +21,22 @@ export function BotStatusCard({ bot }: BotStatusCardProps) {
         <p className="text-xl font-bold text-white capitalize">{bot.botId}-bot</p>
         <Badge variant={statusVariant(bot.status)}>{bot.status}</Badge>
       </div>
-      <p className="mt-3 text-xs text-zinc-500">
-        Updated: {bot.lastUpdate ? formatDateTime(bot.lastUpdate) : '—'}
-      </p>
+      <div className="mt-3 divide-y divide-zinc-800">
+        <div className="flex items-start justify-between gap-4 py-2">
+          <span className="text-sm text-zinc-400">Updated</span>
+          <span className="text-sm font-semibold text-white">
+            {bot.lastUpdate ? formatDateTime(bot.lastUpdate) : '—'}
+          </span>
+        </div>
+        {bot.nextCycleAt && (
+          <div className="flex items-start justify-between gap-4 py-2">
+            <span className="text-sm text-zinc-400">Next cycle</span>
+            <span className="text-sm font-semibold text-white">
+              {formatDateTime(bot.nextCycleAt)}
+            </span>
+          </div>
+        )}
+      </div>
     </Card>
   )
 }

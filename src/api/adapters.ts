@@ -22,6 +22,7 @@ export function adaptGridBotStatus(raw: GridBotStatusResponse): BotStatus {
     isActive: raw.status === 'ACTIVE',
     status: raw.status,
     lastUpdate: raw.generatedAt,
+    nextCycleAt: raw.nextCycleAt,
     exchange: raw.exchange ?? 'binance',
     testnet: raw.testnet ?? true,
   }
@@ -92,6 +93,7 @@ export function adaptTradingBotStatus(raw: TradingBotStatusResponse): BotStatus 
     isActive,
     status: isActive ? 'ACTIVE' : 'IDLE',
     lastUpdate: raw.generatedAt,
+    nextCycleAt: raw.nextCycleAt ?? undefined,
     exchange: raw.config?.exchange ?? 'bybit',
     testnet: raw.config?.testnet ?? true,
   }
@@ -117,6 +119,8 @@ export function adaptTradingBotOrders(raw: TradingBotStatusResponse): Order[] {
     quantity: parseAmount(p.qty),
     status: 'open' as const,
     createdAt: p.openedAt,
+    stopLoss: parseAmount(p.stopLoss) || undefined,
+    takeProfit: parseAmount(p.takeProfit) || undefined,
   }))
 }
 

@@ -37,6 +37,7 @@ export default function App() {
         <div className="space-y-4">
           <BotSection
             title="grid-bot"
+            storageKey="section-grid"
             bot={data.bots.find((b) => b.botType === 'grid')}
           >
             <div className="grid gap-4 sm:grid-cols-2">
@@ -58,6 +59,7 @@ export default function App() {
 
           <BotSection
             title="trading-bot"
+            storageKey="section-trading"
             bot={data.bots.find((b) => b.botType === 'trading')}
           >
             <div className="grid gap-4 sm:grid-cols-2">

@@ -19,20 +19,47 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                 <th className="pb-2 font-medium">Side</th>
                 <th className="pb-2 font-medium text-right">Price</th>
                 <th className="pb-2 font-medium text-right">Qty</th>
+                <th className="pb-2 font-medium text-right">~USDT</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800/50">
-              {orders.map((o) => (
-                <tr key={o.id} className="text-zinc-300">
-                  <td className="py-2">
-                    <Badge variant={o.side === 'buy' ? 'green' : 'red'}>
-                      {o.side.toUpperCase()}
-                    </Badge>
-                  </td>
-                  <td className="py-2 text-right font-mono">{o.price.toLocaleString()}</td>
-                  <td className="py-2 text-right font-mono">{o.quantity.toFixed(5)}</td>
-                </tr>
-              ))}
+              {orders.map((o) => {
+                const usdt = (o.price * o.quantity).toFixed(2)
+                const hasSLTP = o.stopLoss || o.takeProfit
+                return (
+                  <>
+                    <tr key={o.id} className="text-zinc-300">
+                      <td className="pt-2 pb-0.5">
+                        <Badge variant={o.side === 'buy' ? 'green' : 'red'}>
+                          {o.side.toUpperCase()}
+                        </Badge>
+                      </td>
+                      <td className="pt-2 pb-0.5 text-right font-mono">{o.price.toLocaleString()}</td>
+                      <td className="pt-2 pb-0.5 text-right font-mono">{o.quantity.toFixed(5)}</td>
+                      <td className="pt-2 pb-0.5 text-right font-mono text-zinc-400">{usdt}</td>
+                    </tr>
+                    {hasSLTP && (
+                      <tr key={`${o.id}-sltp`} className="border-0">
+                        <td colSpan={4} className="pb-2 pt-0 font-mono text-xs">
+                          {o.stopLoss && (
+                            <span className="text-red-400/80">
+                              SL {o.stopLoss.toLocaleString()}
+                            </span>
+                          )}
+                          {o.stopLoss && o.takeProfit && (
+                            <span className="mx-2 text-zinc-700">·</span>
+                          )}
+                          {o.takeProfit && (
+                            <span className="text-emerald-400/80">
+                              TP {o.takeProfit.toLocaleString()}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                )
+              })}
             </tbody>
           </table>
         </div>
