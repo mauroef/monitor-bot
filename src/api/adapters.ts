@@ -88,7 +88,7 @@ export function adaptGridBotMetrics(
 export function adaptTradingBotStatus(raw: TradingBotStatusResponse): BotStatus {
   const isActive = (raw.openPositions?.length ?? 0) > 0 || raw.account.lastAction === 'BUY'
   return {
-    botId: 'trading',
+    botId: 'signal',
     botType: 'trading',
     isActive,
     status: isActive ? 'ACTIVE' : 'IDLE',

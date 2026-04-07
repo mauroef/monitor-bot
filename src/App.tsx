@@ -58,7 +58,7 @@ export default function App() {
           </BotSection>
 
           <BotSection
-            title="trading-bot"
+            title="signal-bot"
             storageKey="section-trading"
             bot={data.bots.find((b) => b.botType === 'trading')}
           >

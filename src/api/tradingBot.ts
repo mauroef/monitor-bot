@@ -2,7 +2,7 @@ import type { TradingBotStatusResponse, TradingBotBalanceResponse } from '../typ
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`/api/trading${path}`)
-  if (!res.ok) throw new Error(`trading-bot ${path} → ${res.status}`)
+  if (!res.ok) throw new Error(`signal-bot ${path} → ${res.status}`)
   return res.json() as Promise<T>
 }
 

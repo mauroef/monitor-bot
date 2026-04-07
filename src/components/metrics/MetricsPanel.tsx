@@ -15,7 +15,7 @@ const PNL_KEYS = ['totalNetPnl', 'totalGrossPnl']
 
 export function MetricsPanel({ metrics }: MetricsPanelProps) {
   return (
-    <Card title={`${metrics.botType}-bot metrics`}>
+    <Card title="metrics">
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3">
         {Object.entries(metrics.metrics).map(([key, value]) => (
           <div key={key}>
