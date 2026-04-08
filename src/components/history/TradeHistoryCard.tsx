@@ -179,65 +179,67 @@ export function TradeHistoryCard() {
         ) : null}
       </button>
 
-      {open && (
-        <div className="border-t border-zinc-800">
-          {isLoading ? (
-            <div className="space-y-2 p-4">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-4 w-full" />
-              ))}
-            </div>
-          ) : error ? (
-            <p className="py-4 text-center text-xs text-red-400">
-              Unreachable — {(error as Error).message}
-            </p>
-          ) : !data?.length ? (
-            <p className="py-4 text-center text-sm text-zinc-500">No closed trades yet</p>
-          ) : (
-            <>
-              <PnLChart data={data} />
-              <div className="border-t border-zinc-800 overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-zinc-800 text-left text-xs text-zinc-500">
-                      <th className="px-4 py-2 font-medium">Side</th>
-                      <th className="px-4 py-2 font-medium text-right">Entry</th>
-                      <th className="px-4 py-2 font-medium text-right">Close</th>
-                      <th className="px-4 py-2 font-medium text-right">Qty</th>
-                      <th className="px-4 py-2 font-medium text-right">~USDT</th>
-                      <th className="px-4 py-2 font-medium text-right">Net PnL</th>
-                      <th className="px-4 py-2 font-medium">Opened</th>
-                      <th className="px-4 py-2 font-medium">Closed</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-zinc-800/50">
-                    {[...data].reverse().map((t) => (
-                      <tr key={t.id} className="text-zinc-300 hover:bg-zinc-800/30">
-                        <td className="px-4 py-2">
-                          <Badge variant={t.side.toLowerCase() === 'buy' ? 'green' : 'red'}>
-                            {t.side.toUpperCase()}
-                          </Badge>
-                        </td>
-                        <td className="px-4 py-2 text-right font-mono">{stripUnit(t.entryPrice)}</td>
-                        <td className="px-4 py-2 text-right font-mono">{stripUnit(t.closePrice)}</td>
-                        <td className="px-4 py-2 text-right font-mono">{stripUnit(t.qty)}</td>
-                        <td className="px-4 py-2 text-right font-mono text-zinc-400">
-                          {stripUnit(t.notionalUsdt)}
-                        </td>
-                        <td className={`px-4 py-2 text-right font-mono font-semibold ${pnlColor(t.pnl.net)}`}>
-                          {stripUnit(t.pnl.net)}
-                        </td>
-                        <td className="px-4 py-2 font-mono text-xs text-zinc-500">{t.openedAt}</td>
-                        <td className="px-4 py-2 font-mono text-xs text-zinc-500">{t.closedAt}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+      <div className={`grid transition-[grid-template-rows] duration-200 ease-in-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
+          <div className="border-t border-zinc-800">
+            {isLoading ? (
+              <div className="space-y-2 p-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Skeleton key={i} className="h-4 w-full" />
+                ))}
               </div>
-            </>
-          )}
+            ) : error ? (
+              <p className="py-4 text-center text-xs text-red-400">
+                Unreachable — {(error as Error).message}
+              </p>
+            ) : !data?.length ? (
+              <p className="py-4 text-center text-sm text-zinc-500">No closed trades yet</p>
+            ) : (
+              <>
+                <PnLChart data={data} />
+                <div className="border-t border-zinc-800 overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-zinc-800 text-left text-xs text-zinc-500">
+                        <th className="px-4 py-2 font-medium">Side</th>
+                        <th className="px-4 py-2 font-medium text-right">Entry</th>
+                        <th className="px-4 py-2 font-medium text-right">Close</th>
+                        <th className="px-4 py-2 font-medium text-right">Qty</th>
+                        <th className="px-4 py-2 font-medium text-right">~USDT</th>
+                        <th className="px-4 py-2 font-medium text-right">Net PnL</th>
+                        <th className="px-4 py-2 font-medium">Opened</th>
+                        <th className="px-4 py-2 font-medium">Closed</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-800/50">
+                      {[...data].reverse().map((t) => (
+                        <tr key={t.id} className="text-zinc-300 hover:bg-zinc-800/30">
+                          <td className="px-4 py-2">
+                            <Badge variant={t.side.toLowerCase() === 'buy' ? 'green' : 'red'}>
+                              {t.side.toUpperCase()}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2 text-right font-mono">{stripUnit(t.entryPrice)}</td>
+                          <td className="px-4 py-2 text-right font-mono">{stripUnit(t.closePrice)}</td>
+                          <td className="px-4 py-2 text-right font-mono">{stripUnit(t.qty)}</td>
+                          <td className="px-4 py-2 text-right font-mono text-zinc-400">
+                            {stripUnit(t.notionalUsdt)}
+                          </td>
+                          <td className={`px-4 py-2 text-right font-mono font-semibold ${pnlColor(t.pnl.net)}`}>
+                            {stripUnit(t.pnl.net)}
+                          </td>
+                          <td className="px-4 py-2 font-mono text-xs text-zinc-500">{t.openedAt}</td>
+                          <td className="px-4 py-2 font-mono text-xs text-zinc-500">{t.closedAt}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

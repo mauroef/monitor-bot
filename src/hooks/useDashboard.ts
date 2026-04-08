@@ -30,7 +30,9 @@ export function useDashboard() {
   })
 
   const isLoading = gridStatus.isLoading || gridGrid.isLoading || tradingStatus.isLoading
-  const errors = [gridStatus.error, gridGrid.error, tradingStatus.error].filter(Boolean) as Error[]
+  const gridErrors = [gridStatus.error, gridGrid.error].filter(Boolean) as Error[]
+  const tradingErrors = [tradingStatus.error].filter(Boolean) as Error[]
+  const errors = [...gridErrors, ...tradingErrors]
 
   // gridGrid may return { status: 'not_initialized' } with no account/levels
   const gridInitialized = gridGrid.data && gridGrid.data.status !== 'not_initialized'
@@ -61,5 +63,5 @@ export function useDashboard() {
     ],
   }
 
-  return { data, isLoading, errors }
+  return { data, isLoading, errors, gridErrors, tradingErrors }
 }

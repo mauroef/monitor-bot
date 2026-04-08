@@ -1,6 +1,7 @@
 import { useTradingBalance } from '../../hooks/useTradingBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
+import { CoinIcon } from '../ui/CoinIcon'
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
@@ -35,7 +36,10 @@ export function BalanceWidget() {
         <div className="divide-y divide-zinc-800">
           <div className="pb-3">
             <p className="text-xs text-zinc-500">{symbol}</p>
-            <p className="text-2xl font-bold tabular-nums text-white">{balance.currentPrice}</p>
+            <div className="mt-1.5 flex items-center gap-2">
+              <CoinIcon asset={baseAsset} className="size-8 shrink-0" />
+              <p className="text-2xl font-bold tabular-nums text-white">{balance.currentPrice}</p>
+            </div>
           </div>
 
           <div className="py-1">

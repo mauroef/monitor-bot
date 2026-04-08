@@ -73,33 +73,35 @@ function LogContainer({
         ) : null}
       </button>
 
-      {open && (
-        <div
-          className="overflow-y-auto border-t border-zinc-800 bg-zinc-950 px-3 py-2"
-          style={{ maxHeight: '320px' }}
-        >
-          {isLoading ? (
-            <div className="space-y-2 pt-1">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-3 w-full" />
-              ))}
-            </div>
-          ) : error ? (
-            <p className="py-2 text-center font-mono text-xs text-red-400">
-              Unreachable — {(error as Error).message}
-            </p>
-          ) : !entries?.length ? (
-            <p className="py-2 text-center font-mono text-xs text-zinc-600">No logs yet</p>
-          ) : (
-            <>
-              {entries.map((e) => (
-                <LogLine key={e.id} entry={e} />
-              ))}
-              <div ref={bottomRef} />
-            </>
-          )}
+      <div className={`grid transition-[grid-template-rows] duration-200 ease-in-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
+          <div
+            className="overflow-y-auto border-t border-zinc-800 bg-zinc-950 px-3 py-2"
+            style={{ maxHeight: '320px' }}
+          >
+            {isLoading ? (
+              <div className="space-y-2 pt-1">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-3 w-full" />
+                ))}
+              </div>
+            ) : error ? (
+              <p className="py-2 text-center font-mono text-xs text-red-400">
+                Unreachable — {(error as Error).message}
+              </p>
+            ) : !entries?.length ? (
+              <p className="py-2 text-center font-mono text-xs text-zinc-600">No logs yet</p>
+            ) : (
+              <>
+                {entries.map((e) => (
+                  <LogLine key={e.id} entry={e} />
+                ))}
+                <div ref={bottomRef} />
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

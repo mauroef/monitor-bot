@@ -11,23 +11,10 @@ import { GridBotLogCard, TradingBotLogCard } from './components/logs/BotLogCard'
 import { TradeHistoryCard } from './components/history/TradeHistoryCard'
 
 export default function App() {
-  const { data, isLoading, errors } = useDashboard()
+  const { data, isLoading, gridErrors, tradingErrors } = useDashboard()
 
   return (
     <DashboardLayout>
-      {errors.length > 0 && (
-        <div className="mb-6 space-y-2">
-          {errors.map((err) => (
-            <div
-              key={err.message}
-              className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400"
-            >
-              {err.message}
-            </div>
-          ))}
-        </div>
-      )}
-
       {isLoading && !data ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -40,6 +27,7 @@ export default function App() {
             title="grid-bot"
             storageKey="section-grid"
             bot={data.bots.find((b) => b.botType === 'grid')}
+            errors={gridErrors}
           >
             <div className="grid gap-4 sm:grid-cols-2">
               {data.bots
@@ -62,6 +50,7 @@ export default function App() {
             title="signal-bot"
             storageKey="section-trading"
             bot={data.bots.find((b) => b.botType === 'trading')}
+            errors={tradingErrors}
           >
             <div className="grid gap-4 sm:grid-cols-2">
               {data.bots
