@@ -43,7 +43,7 @@ export default function App() {
                 <MetricsPanel key={m.botType} metrics={m} />
               ))}
             <GridBotLogCard />
-            <OrdersTable orders={data.openOrders.filter((o) => o.botType === 'grid')} />
+            <OrdersTable storageKey="orders-grid" orders={data.openOrders.filter((o) => o.botType === 'grid')} />
           </BotSection>
 
           <BotSection
@@ -66,7 +66,7 @@ export default function App() {
                 <MetricsPanel key={m.botType} metrics={m} />
               ))}
             <TradingBotLogCard />
-            <OrdersTable orders={data.openOrders.filter((o) => o.botType === 'trading')} />
+            <OrdersTable storageKey="orders-trading" orders={data.openOrders.filter((o) => o.botType === 'trading')} />
             <TradeHistoryCard />
           </BotSection>
         </div>
