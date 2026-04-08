@@ -8,6 +8,7 @@ import { OrdersTable } from './components/orders/OrdersTable'
 import { MetricsPanel } from './components/metrics/MetricsPanel'
 import { CardSkeleton } from './components/ui/Skeleton'
 import { GridBotLogCard, TradingBotLogCard } from './components/logs/BotLogCard'
+import { TradeHistoryCard } from './components/history/TradeHistoryCard'
 
 export default function App() {
   const { data, isLoading, errors } = useDashboard()
@@ -77,6 +78,7 @@ export default function App() {
               ))}
             <TradingBotLogCard />
             <OrdersTable orders={data.openOrders.filter((o) => o.botType === 'trading')} />
+            <TradeHistoryCard />
           </BotSection>
         </div>
       ) : null}

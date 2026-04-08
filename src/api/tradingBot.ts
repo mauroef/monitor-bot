@@ -6,6 +6,24 @@ async function get<T>(path: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
+export interface TradeHistoryEntry {
+  id: string
+  symbol: string
+  side: string
+  entryPrice: string
+  closePrice: string | null
+  qty: string
+  notionalUsdt: string
+  balanceBeforeTrade: string | null
+  openedAt: string
+  closedAt: string
+  pnl: {
+    gross: string | null
+    fees: string | null
+    net: string | null
+  }
+}
+
 export interface BotLogEntry {
   id: number
   ts: string
@@ -19,4 +37,5 @@ export const tradingBotApi = {
   balance: () => get<TradingBotBalanceResponse>('/balance'),
   health: () => get<{ status: string; ts: string }>('/health'),
   logs: () => get<BotLogEntry[]>('/logs'),
+  history: () => get<TradeHistoryEntry[]>('/history'),
 }
