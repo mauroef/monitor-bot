@@ -5,9 +5,10 @@ import type { Order } from '../../types'
 interface OrdersTableProps {
   storageKey: string
   orders: Order[]
+  showSlTp?: boolean
 }
 
-export function OrdersTable({ storageKey, orders }: OrdersTableProps) {
+export function OrdersTable({ storageKey, orders, showSlTp = false }: OrdersTableProps) {
   return (
     <CollapsibleCard
       storageKey={storageKey}
@@ -25,8 +26,8 @@ export function OrdersTable({ storageKey, orders }: OrdersTableProps) {
                 <th className="px-4 pb-2 pt-3 font-medium text-right">Price</th>
                 <th className="px-4 pb-2 pt-3 font-medium text-right">Qty</th>
                 <th className="px-4 pb-2 pt-3 font-medium text-right">~USDT</th>
-                <th className="px-4 pb-2 pt-3 font-medium text-right">SL</th>
-                <th className="px-4 pb-2 pt-3 font-medium text-right">TP</th>
+                {showSlTp && <th className="px-4 pb-2 pt-3 font-medium text-right">SL</th>}
+                {showSlTp && <th className="px-4 pb-2 pt-3 font-medium text-right">TP</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800/50">
@@ -42,12 +43,16 @@ export function OrdersTable({ storageKey, orders }: OrdersTableProps) {
                     <td className="px-4 py-2 text-right font-mono">{o.price.toLocaleString()}</td>
                     <td className="px-4 py-2 text-right font-mono">{o.quantity.toFixed(5)}</td>
                     <td className="px-4 py-2 text-right font-mono text-zinc-400">{usdt}</td>
-                    <td className="px-4 py-2 text-right font-mono text-red-400/80">
-                      {o.stopLoss ? o.stopLoss.toLocaleString() : <span className="text-zinc-700">—</span>}
-                    </td>
-                    <td className="px-4 py-2 text-right font-mono text-emerald-400/80">
-                      {o.takeProfit ? o.takeProfit.toLocaleString() : <span className="text-zinc-700">—</span>}
-                    </td>
+                    {showSlTp && (
+                      <td className="px-4 py-2 text-right font-mono text-red-400/80">
+                        {o.stopLoss ? o.stopLoss.toLocaleString() : <span className="text-zinc-700">—</span>}
+                      </td>
+                    )}
+                    {showSlTp && (
+                      <td className="px-4 py-2 text-right font-mono text-emerald-400/80">
+                        {o.takeProfit ? o.takeProfit.toLocaleString() : <span className="text-zinc-700">—</span>}
+                      </td>
+                    )}
                   </tr>
                 )
               })}

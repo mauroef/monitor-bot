@@ -68,7 +68,7 @@ export default function App() {
                 <MetricsPanel key={m.botType} metrics={m} />
               ))}
             <TradingBotLogCard />
-            <OrdersTable storageKey="orders-trading" orders={data.openOrders.filter((o) => o.botType === 'trading')} />
+            <OrdersTable storageKey="orders-trading" orders={data.openOrders.filter((o) => o.botType === 'trading')} showSlTp />
             <TradeHistoryCard />
           </BotSection>
         </div>
