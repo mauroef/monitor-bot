@@ -9,6 +9,7 @@ import { MetricsPanel } from './components/metrics/MetricsPanel'
 import { CardSkeleton } from './components/ui/Skeleton'
 import { GridBotLogCard, TradingBotLogCard } from './components/logs/BotLogCard'
 import { TradeHistoryCard } from './components/history/TradeHistoryCard'
+import { GridResetButton } from './components/bots/GridResetButton'
 
 export default function App() {
   const { data, isLoading, gridErrors, tradingErrors } = useDashboard()
@@ -28,6 +29,7 @@ export default function App() {
             storageKey="section-grid"
             bot={data.bots.find((b) => b.botType === 'grid')}
             errors={gridErrors}
+            actions={<GridResetButton />}
           >
             <div className="grid gap-4 sm:grid-cols-2">
               {data.bots

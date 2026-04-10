@@ -68,6 +68,7 @@ export interface GridBotGridResponse {
   status: string
   symbol: string
   profile: string
+  currentPrice: string | null
   generatedAt: string
   nextCycleAt: string
   cooldownUntil: string

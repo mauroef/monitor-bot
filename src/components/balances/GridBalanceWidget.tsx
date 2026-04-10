@@ -1,6 +1,7 @@
 import { useGridBalance } from '../../hooks/useGridBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
+import { CoinIcon } from '../ui/CoinIcon'
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
@@ -33,15 +34,21 @@ export function GridBalanceWidget() {
         <p className="py-4 text-center text-xs text-zinc-500">Grid not started yet</p>
       ) : (
         <div className="divide-y divide-zinc-800">
-          {/* Grid range as context */}
           <div className="pb-3">
             <p className="text-xs text-zinc-500">{grid.symbol}</p>
-            <p className="text-sm text-zinc-400">
-              Grid{' '}
-              <span className="font-semibold text-white">
-                {grid.grid.lower} – {grid.grid.upper}
-              </span>
-            </p>
+            <div className="mt-1.5 flex items-center gap-2">
+              <CoinIcon asset={baseAsset} className="size-8 shrink-0" />
+              {grid.currentPrice ? (
+                <p className="text-2xl font-bold tabular-nums text-white">{grid.currentPrice}</p>
+              ) : (
+                <p className="text-sm text-zinc-400">
+                  Grid{' '}
+                  <span className="font-semibold text-white">
+                    {grid.grid.lower} – {grid.grid.upper}
+                  </span>
+                </p>
+              )}
+            </div>
           </div>
 
           {/* USDT */}
