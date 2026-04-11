@@ -1,3 +1,4 @@
+import { Zap, Pause, OctagonX, Clock, FlaskConical, Globe } from 'lucide-react'
 import type { BotStatus } from '../../types'
 import { Badge } from '../ui/Badge'
 import { formatDateTime } from '../../utils/format'
@@ -8,6 +9,14 @@ const statusVariant = (status: string) => {
   if (status === 'PAUSED' || status === 'IDLE') return 'yellow'
   if (status === 'STOPPED') return 'red'
   return 'gray'
+}
+
+const statusIcon = (status: string) => {
+  if (status === 'ACTIVE') return <Zap className="size-3" />
+  if (status === 'PAUSED') return <Pause className="size-3" />
+  if (status === 'STOPPED') return <OctagonX className="size-3" />
+  if (status === 'IDLE') return <Clock className="size-3" />
+  return null
 }
 
 interface BotSectionProps {
@@ -25,7 +34,7 @@ export function BotSection({ title, storageKey, bot, errors, actions, children, 
 
   return (
     <div className="overflow-hidden rounded-xl border border-zinc-800">
-      <div className="flex w-full items-center gap-3 bg-zinc-900 px-4 py-3">
+      <div className="flex w-full items-center gap-3 bg-zinc-900 px-4 py-3 transition-colors hover:bg-zinc-800/60">
         <button
           onClick={() => setOpen(!open)}
           className="flex min-w-0 flex-1 items-center gap-3 text-left"
@@ -47,16 +56,20 @@ export function BotSection({ title, storageKey, bot, errors, actions, children, 
 
           {bot && (
             <div className="flex items-center gap-1.5">
-              <Badge variant={statusVariant(bot.status)}>{bot.status}</Badge>
+              <Badge variant={statusVariant(bot.status)}>
+                {statusIcon(bot.status)}
+                <span className="hidden sm:inline">{bot.status}</span>
+              </Badge>
               <Badge variant={bot.testnet ? 'yellow' : 'green'}>
-                {bot.testnet ? 'testnet' : 'mainnet'}
+                {bot.testnet ? <FlaskConical className="size-3" /> : <Globe className="size-3" />}
+                <span className="hidden sm:inline">{bot.testnet ? 'testnet' : 'mainnet'}</span>
               </Badge>
             </div>
           )}
         </button>
 
         {bot?.lastUpdate && (
-          <span className="text-xs text-zinc-600">{formatDateTime(bot.lastUpdate)}</span>
+          <span className="hidden sm:block text-xs text-zinc-600">{formatDateTime(bot.lastUpdate)}</span>
         )}
 
         {actions}

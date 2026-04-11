@@ -27,7 +27,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <header className="border-b border-zinc-800 px-6 py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <h1 className="text-lg font-semibold tracking-tight">
-            <span className="text-emerald-400">●</span> monitor-bot
+            <a href="/" className="hover:opacity-80 transition-opacity">
+              <span className="text-emerald-400">●</span> monitor-bot
+            </a>
           </h1>
           <RefreshBar />
         </div>
