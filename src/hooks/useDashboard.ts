@@ -34,8 +34,8 @@ export function useDashboard() {
   const tradingErrors = [tradingStatus.error].filter(Boolean) as Error[]
   const errors = [...gridErrors, ...tradingErrors]
 
-  // gridGrid may return { status: 'not_initialized' } with no account/levels
-  const gridInitialized = gridGrid.data && gridGrid.data.status !== 'not_initialized'
+  // gridGrid may return { status: 'not_initialized' | 'PENDING_INIT' } with no account/levels
+  const gridInitialized = gridGrid.data && gridGrid.data.status !== 'not_initialized' && gridGrid.data.status !== 'PENDING_INIT'
 
   let data: DashboardData | null = null
 

@@ -75,10 +75,10 @@ export interface GridBotGridResponse {
   account: {
     freeBalance: string
     usdtInBuys: string
-    btcInSells: string
+    baseInSells: string
     capitalDeployed: string
     totalPortfolio: string
-  }
+  } | null
   grid: {
     lower: string
     upper: string
@@ -86,7 +86,7 @@ export interface GridBotGridResponse {
     spacing: string
     atrAtCreation: string
     createdAt: string
-  }
+  } | null
   levels: {
     total: number
     open: number
@@ -100,7 +100,7 @@ export interface GridBotGridResponse {
       orderId: string
       placedAt: string
     }>
-  }
+  } | null
   performance: {
     totalCycles: number
     totalGrossPnl: string

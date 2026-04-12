@@ -34,7 +34,7 @@ export function adaptGridBotBalances(raw: GridBotGridResponse): Balance[] {
   const freeUsdt = parseAmount(raw.account.freeBalance)
   const lockedUsdt = parseAmount(raw.account.usdtInBuys)
   const baseAsset = raw.symbol?.replace(/USDT$/i, '') ?? 'BASE'
-  const baseInSells = parseFloat(raw.account.btcInSells) || 0
+  const baseInSells = parseAmount(raw.account.baseInSells)
 
   return [
     {

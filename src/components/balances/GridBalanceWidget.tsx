@@ -15,7 +15,12 @@ function Row({ label, value }: { label: string; value: string }) {
 export function GridBalanceWidget() {
   const { data: grid, isLoading, error } = useGridBalance()
 
-  const notInitialized = !grid || grid.status === 'not_initialized'
+  const notInitialized =
+    !grid ||
+    grid.status === 'not_initialized' ||
+    grid.status === 'PENDING_INIT' ||
+    !grid.account ||
+    !grid.grid
   const baseAsset = grid?.symbol?.replace(/USDT$/i, '') ?? 'BASE'
 
   return (
@@ -31,7 +36,9 @@ export function GridBalanceWidget() {
           Unreachable — {(error as Error).message}
         </p>
       ) : notInitialized ? (
-        <p className="py-4 text-center text-xs text-zinc-500">Grid not started yet</p>
+        <p className="py-4 text-center text-xs text-zinc-500">
+          {grid?.status === 'PENDING_INIT' ? 'Resetting — starts on next cycle' : 'Grid not started yet'}
+        </p>
       ) : (
         <div className="divide-y divide-zinc-800">
           <div className="pb-3">
@@ -44,7 +51,7 @@ export function GridBalanceWidget() {
                 <p className="text-sm text-zinc-400">
                   Grid{' '}
                   <span className="font-semibold text-white">
-                    {grid.grid.lower} – {grid.grid.upper}
+                    {grid.grid!.lower} – {grid.grid!.upper}
                   </span>
                 </p>
               )}
@@ -53,14 +60,14 @@ export function GridBalanceWidget() {
 
           {/* USDT */}
           <div className="py-1">
-            <Row label="USDT free" value={grid.account.freeBalance} />
-            <Row label="USDT in buys" value={grid.account.usdtInBuys} />
+            <Row label="USDT free" value={grid.account!.freeBalance} />
+            <Row label="USDT in buys" value={grid.account!.usdtInBuys} />
           </div>
 
           {/* base asset */}
           <div className="py-1">
-            <Row label={`${baseAsset} in sells`} value={grid.account.btcInSells} />
-            <Row label="Capital deployed" value={grid.account.capitalDeployed} />
+            <Row label={`${baseAsset} in sells`} value={grid.account!.baseInSells} />
+            <Row label="Capital deployed" value={grid.account!.capitalDeployed} />
           </div>
 
           {/* Total */}
@@ -68,7 +75,7 @@ export function GridBalanceWidget() {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-zinc-300">Total portfolio</span>
               <span className="text-base font-bold text-emerald-400">
-                {grid.account.totalPortfolio}
+                {grid.account!.totalPortfolio}
               </span>
             </div>
           </div>
