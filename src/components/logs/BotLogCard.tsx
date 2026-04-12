@@ -5,9 +5,28 @@ import { useGridLogs, useTradingLogs, levelColor, formatLogData } from '../../ho
 import type { GridLogEntry } from '../../hooks/useBotLog'
 import { formatDateTime } from '../../utils/format'
 
+const ACTION_STYLE: Record<string, string> = {
+  BUY:  'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40',
+  SELL: 'bg-red-500/20 text-red-300 ring-1 ring-red-500/40',
+  HOLD: 'bg-zinc-700/60 text-zinc-400 ring-1 ring-zinc-600/40',
+}
+
+function ActionBadge({ action }: { action: string }) {
+  const style = ACTION_STYLE[action.toUpperCase()] ?? 'bg-zinc-700/60 text-zinc-400'
+  return (
+    <span className={`shrink-0 rounded px-1.5 py-0.5 font-semibold uppercase leading-none ${style}`}>
+      {action}
+    </span>
+  )
+}
+
 function LogLine({ entry }: { entry: GridLogEntry }) {
   const time = formatDateTime(entry.ts)
-  const hasData = Object.keys(entry.data).length > 0
+  const action = typeof entry.data?.action === 'string' ? entry.data.action : null
+  const dataWithoutAction = action
+    ? Object.fromEntries(Object.entries(entry.data).filter(([k]) => k !== 'action'))
+    : entry.data
+  const hasData = Object.keys(dataWithoutAction).length > 0
 
   return (
     <div className="font-mono text-xs leading-5 py-0.5">
@@ -16,11 +35,12 @@ function LogLine({ entry }: { entry: GridLogEntry }) {
         <span className={`shrink-0 w-10 font-semibold ${levelColor(entry.level)}`}>
           {entry.level}
         </span>
+        {action && <ActionBadge action={action} />}
         <span className="text-zinc-200 wrap-break-word min-w-0">{entry.message}</span>
       </div>
       {hasData && (
         <div className="pl-0 text-zinc-500 break-all whitespace-pre-wrap">
-          {formatLogData(entry.data)}
+          {formatLogData(dataWithoutAction)}
         </div>
       )}
     </div>
