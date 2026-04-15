@@ -1,4 +1,4 @@
-export type BotType = 'grid' | 'trading'
+export type BotType = 'grid' | 'signal'
 
 export interface BotStatus {
   botId: string
@@ -120,8 +120,8 @@ export interface GridBotGridResponse {
   }>
 }
 
-// Raw response shapes from trading-bot
-export interface TradingBotStatusResponse {
+// Raw response shapes from signal-bot
+export interface SignalBotStatusResponse {
   generatedAt: string
   nextCycleAt: string | null
   config: {
@@ -172,7 +172,7 @@ export interface TradingBotStatusResponse {
   }>
 }
 
-export interface TradingBotBalanceResponse {
+export interface SignalBotBalanceResponse {
   symbol: string
   currentPrice: string
   usdtFree: string

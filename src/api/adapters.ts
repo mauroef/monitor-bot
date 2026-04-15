@@ -1,7 +1,7 @@
 import type {
   GridBotStatusResponse,
   GridBotGridResponse,
-  TradingBotStatusResponse,
+  SignalBotStatusResponse,
   BotStatus,
   Balance,
   Order,
@@ -88,11 +88,11 @@ export function adaptGridBotMetrics(
   }
 }
 
-export function adaptTradingBotStatus(raw: TradingBotStatusResponse): BotStatus {
+export function adaptSignalBotStatus(raw: SignalBotStatusResponse): BotStatus {
   const isActive = (raw.openPositions?.length ?? 0) > 0 || raw.account.lastAction === 'BUY'
   return {
     botId: 'signal',
-    botType: 'trading',
+    botType: 'signal',
     isActive,
     status: isActive ? 'ACTIVE' : 'IDLE',
     lastUpdate: raw.generatedAt,
@@ -102,7 +102,7 @@ export function adaptTradingBotStatus(raw: TradingBotStatusResponse): BotStatus 
   }
 }
 
-export function adaptTradingBotBalances(raw: TradingBotStatusResponse): Balance[] {
+export function adaptSignalBotBalances(raw: SignalBotStatusResponse): Balance[] {
   return [
     {
       asset: 'USDT',
@@ -113,10 +113,10 @@ export function adaptTradingBotBalances(raw: TradingBotStatusResponse): Balance[
   ]
 }
 
-export function adaptTradingBotOrders(raw: TradingBotStatusResponse): Order[] {
+export function adaptSignalBotOrders(raw: SignalBotStatusResponse): Order[] {
   return raw.openPositions.map((p) => ({
     id: p.id,
-    botType: 'trading' as const,
+    botType: 'signal' as const,
     side: p.side.toLowerCase() as 'buy' | 'sell',
     price: parseAmount(p.entryPrice),
     quantity: parseAmount(p.qty),
@@ -127,9 +127,9 @@ export function adaptTradingBotOrders(raw: TradingBotStatusResponse): Order[] {
   }))
 }
 
-export function adaptTradingBotMetrics(raw: TradingBotStatusResponse): BotMetrics {
+export function adaptSignalBotMetrics(raw: SignalBotStatusResponse): BotMetrics {
   return {
-    botType: 'trading',
+    botType: 'signal',
     metrics: {
       totalTrades: raw.performance.totalTrades,
       winners: raw.performance.winners,

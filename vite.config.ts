@@ -13,10 +13,10 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/grid/, ''),
       },
-      '/api/trading': {
-        target: process.env.VITE_TRADING_BOT_API_URL ?? 'http://localhost:3001',
+      '/api/signal': {
+        target: process.env.VITE_SIGNAL_BOT_API_URL ?? 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/trading/, ''),
+        rewrite: (path) => path.replace(/^\/api\/signal/, ''),
       },
     },
   },

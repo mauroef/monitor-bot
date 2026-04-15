@@ -14,7 +14,7 @@ import { Badge } from '../ui/Badge'
 import { Skeleton } from '../ui/Skeleton'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { useSignalHistory } from '../../hooks/useSignalHistory'
-import type { TradeHistoryEntry } from '../../api/tradingBot'
+import type { TradeHistoryEntry } from '../../api/signalBot'
 
 function pnlColor(value: string | null) {
   if (!value) return 'text-zinc-500'

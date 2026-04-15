@@ -1,7 +1,7 @@
-import type { TradingBotStatusResponse, TradingBotBalanceResponse } from '../types'
+import type { SignalBotStatusResponse, SignalBotBalanceResponse } from '../types'
 
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`/api/trading${path}`)
+  const res = await fetch(`/api/signal${path}`)
   if (!res.ok) throw new Error(`signal-bot ${path} → ${res.status}`)
   return res.json() as Promise<T>
 }
@@ -32,9 +32,9 @@ export interface BotLogEntry {
   data: Record<string, unknown>
 }
 
-export const tradingBotApi = {
-  status: () => get<TradingBotStatusResponse>('/status'),
-  balance: () => get<TradingBotBalanceResponse>('/balance'),
+export const signalBotApi = {
+  status: () => get<SignalBotStatusResponse>('/status'),
+  balance: () => get<SignalBotBalanceResponse>('/balance'),
   health: () => get<{ status: string; ts: string }>('/health'),
   logs: () => get<BotLogEntry[]>('/logs'),
   history: () => get<TradeHistoryEntry[]>('/history'),

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { tradingBotApi } from '../api/tradingBot'
+import { signalBotApi } from '../api/signalBot'
 
 export function useSignalHistory() {
   return useQuery({
-    queryKey: ['trading', 'history'],
-    queryFn: tradingBotApi.history,
+    queryKey: ['signal', 'history'],
+    queryFn: signalBotApi.history,
     staleTime: 30_000,
   })
 }

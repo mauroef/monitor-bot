@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import { gridBotApi } from '../api/gridBot'
-import { tradingBotApi } from '../api/tradingBot'
+import { signalBotApi } from '../api/signalBot'
 import type { BotLogEntry as GridLogEntry } from '../api/gridBot'
-import type { BotLogEntry as TradingLogEntry } from '../api/tradingBot'
+import type { BotLogEntry as SignalLogEntry } from '../api/signalBot'
 
-// Messages to suppress in the trading-bot log
-const TRADING_SKIP = ['Waiting for next cycle']
+// Messages to suppress in the grid-bot log
+const GRID_SKIP = ['Waiting for next cycle']
 
-export type { GridLogEntry, TradingLogEntry }
+// Messages to suppress in the signal-bot log
+const SIGNAL_SKIP = ['Waiting for next cycle']
+
+export type { GridLogEntry, SignalLogEntry }
 
 const LEVEL_COLOR: Record<string, string> = {
   INFO:  'text-cyan-400',
@@ -22,22 +25,28 @@ export function levelColor(level: string): string {
 }
 
 export function useGridLogs() {
-  return useQuery({
+  const { data, ...rest } = useQuery({
     queryKey: ['grid', 'logs'],
     queryFn: gridBotApi.logs,
     staleTime: 10_000,
   })
+
+  const filtered = data?.filter((e: GridLogEntry) =>
+    !GRID_SKIP.some((skip) => e.message.includes(skip))
+  )
+
+  return { data: filtered, ...rest }
 }
 
-export function useTradingLogs() {
+export function useSignalLogs() {
   const { data, ...rest } = useQuery({
-    queryKey: ['trading', 'logs'],
-    queryFn: tradingBotApi.logs,
+    queryKey: ['signal', 'logs'],
+    queryFn: signalBotApi.logs,
     staleTime: 10_000,
   })
 
-  const filtered = data?.filter((e: TradingLogEntry) =>
-    !TRADING_SKIP.some((skip) => e.message.includes(skip))
+  const filtered = data?.filter((e: SignalLogEntry) =>
+    !SIGNAL_SKIP.some((skip) => e.message.includes(skip))
   )
 
   return { data: filtered, ...rest }

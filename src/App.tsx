@@ -8,12 +8,12 @@ import { OrdersTable } from './components/orders/OrdersTable'
 import { MetricsPanel } from './components/metrics/MetricsPanel'
 import { CardSkeleton } from './components/ui/Skeleton'
 import { GridCard } from './components/grid/GridCard'
-import { GridBotLogCard, TradingBotLogCard } from './components/logs/BotLogCard'
+import { GridBotLogCard, SignalBotLogCard } from './components/logs/BotLogCard'
 import { TradeHistoryCard } from './components/history/TradeHistoryCard'
 import { GridResetButton } from './components/bots/GridResetButton'
 
 export default function App() {
-  const { data, isLoading, gridErrors, tradingErrors } = useDashboard()
+  const { data, isLoading, gridErrors, signalErrors } = useDashboard()
 
   return (
     <DashboardLayout>
@@ -52,25 +52,25 @@ export default function App() {
 
           <BotSection
             title="signal-bot"
-            storageKey="section-trading"
-            bot={data.bots.find((b) => b.botType === 'trading')}
-            errors={tradingErrors}
+            storageKey="section-signal"
+            bot={data.bots.find((b) => b.botType === 'signal')}
+            errors={signalErrors}
           >
             <div className="grid gap-4 sm:grid-cols-2">
               {data.bots
-                .filter((b) => b.botType === 'trading')
+                .filter((b) => b.botType === 'signal')
                 .map((bot) => (
                   <BotStatusCard key={bot.botId} bot={bot} />
                 ))}
               <BalanceWidget />
             </div>
             {data.metrics
-              .filter((m) => m.botType === 'trading')
+              .filter((m) => m.botType === 'signal')
               .map((m) => (
                 <MetricsPanel key={m.botType} metrics={m} />
               ))}
-            <TradingBotLogCard />
-            <OrdersTable storageKey="orders-trading" orders={data.openOrders.filter((o) => o.botType === 'trading')} showSlTp />
+            <SignalBotLogCard />
+            <OrdersTable storageKey="orders-signal" orders={data.openOrders.filter((o) => o.botType === 'signal')} showSlTp />
             <TradeHistoryCard />
           </BotSection>
         </div>

@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { Skeleton } from '../ui/Skeleton'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
-import { useGridLogs, useTradingLogs, levelColor, formatLogData } from '../../hooks/useBotLog'
+import { useGridLogs, useSignalLogs, levelColor, formatLogData } from '../../hooks/useBotLog'
 import type { GridLogEntry } from '../../hooks/useBotLog'
 import { formatDateTime } from '../../utils/format'
 
@@ -111,11 +111,11 @@ export function GridBotLogCard() {
   )
 }
 
-export function TradingBotLogCard() {
-  const { data, isLoading, error } = useTradingLogs()
+export function SignalBotLogCard() {
+  const { data, isLoading, error } = useSignalLogs()
   return (
     <LogContainer
-      storageKey="log-trading"
+      storageKey="log-signal"
       entries={data as GridLogEntry[] | undefined}
       isLoading={isLoading}
       error={error}

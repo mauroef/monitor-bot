@@ -1,4 +1,4 @@
-import { useTradingBalance } from '../../hooks/useTradingBalance'
+import { useSignalBalance } from '../../hooks/useSignalBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
 import { CoinIcon } from '../ui/CoinIcon'
@@ -13,7 +13,7 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 export function BalanceWidget() {
-  const { data: balance, isLoading, error } = useTradingBalance()
+  const { data: balance, isLoading, error } = useSignalBalance()
 
   const symbol = balance?.symbol ?? 'BTCUSDT'
   const baseAsset = symbol.replace('USDT', '')
