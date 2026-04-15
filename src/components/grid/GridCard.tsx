@@ -13,6 +13,7 @@ import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { Skeleton } from '../ui/Skeleton'
 import { useGridBalance } from '../../hooks/useGridBalance'
 import type { GridBotGridResponse } from '../../types'
+import { getQuoteAsset } from '../../utils/format'
 
 function parseNum(str: string | null | undefined): number {
   if (!str) return 0
@@ -127,24 +128,27 @@ function PriceLadder({
 // ─── Cycles PnL Chart ─────────────────────────────────────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function CycleTooltip({ active, payload, label }: any) {
-  if (!active || !payload?.length) return null
-  const gross: number = payload.find((p: any) => p.dataKey === 'gross')?.value ?? 0
-  const cum: number = payload.find((p: any) => p.dataKey === 'cumulative')?.value ?? 0
-  return (
-    <div className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs shadow-lg">
-      <p className="mb-1 text-zinc-400">{label}</p>
-      <p className={gross >= 0 ? 'text-emerald-400' : 'text-red-400'}>
-        Cycle: {gross >= 0 ? '+' : ''}{gross.toFixed(4)} USDT
-      </p>
-      <p className={cum >= 0 ? 'text-emerald-300' : 'text-red-300'}>
-        Cumulative: {cum >= 0 ? '+' : ''}{cum.toFixed(4)} USDT
-      </p>
-    </div>
-  )
+function makeCycleTooltip(quoteAsset: string) {
+  return function CycleTooltip({ active, payload, label }: any) {
+    if (!active || !payload?.length) return null
+    const gross: number = payload.find((p: any) => p.dataKey === 'gross')?.value ?? 0
+    const cum: number = payload.find((p: any) => p.dataKey === 'cumulative')?.value ?? 0
+    return (
+      <div className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs shadow-lg">
+        <p className="mb-1 text-zinc-400">{label}</p>
+        <p className={gross >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+          Cycle: {gross >= 0 ? '+' : ''}{gross.toFixed(4)} {quoteAsset}
+        </p>
+        <p className={cum >= 0 ? 'text-emerald-300' : 'text-red-300'}>
+          Cumulative: {cum >= 0 ? '+' : ''}{cum.toFixed(4)} {quoteAsset}
+        </p>
+      </div>
+    )
+  }
 }
 
-function CyclesPnLChart({ cycles }: { cycles: GridBotGridResponse['recentCycles'] }) {
+function CyclesPnLChart({ cycles, symbol }: { cycles: GridBotGridResponse['recentCycles']; symbol: string }) {
+  const CycleTooltip = makeCycleTooltip(getQuoteAsset(symbol))
   let cumulative = 0
   const chartData = cycles.map((c, i) => {
     const gross = parseNum(c.grossPnl)
@@ -259,7 +263,7 @@ export function GridCard() {
               <PriceLadder grid={grid.grid} levels={grid.levels} currentPrice={grid.currentPrice} />
             )
           )}
-          {grid.recentCycles.length > 0 && <CyclesPnLChart cycles={grid.recentCycles} />}
+          {grid.recentCycles.length > 0 && <CyclesPnLChart cycles={grid.recentCycles} symbol={grid.symbol} />}
         </>
       )}
     </CollapsibleCard>

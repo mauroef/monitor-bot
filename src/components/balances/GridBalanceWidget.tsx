@@ -2,6 +2,7 @@ import { useGridBalance } from '../../hooks/useGridBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
 import { CoinIcon } from '../ui/CoinIcon'
+import { getQuoteAsset, getBaseAsset } from '../../utils/format'
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
@@ -21,7 +22,8 @@ export function GridBalanceWidget() {
     grid.status === 'PENDING_INIT' ||
     !grid.account ||
     !grid.grid
-  const baseAsset = grid?.symbol?.replace(/USDT$/i, '') ?? 'BASE'
+  const quoteAsset = grid?.symbol ? getQuoteAsset(grid.symbol) : 'USDT'
+  const baseAsset = grid?.symbol ? getBaseAsset(grid.symbol) : 'BASE'
 
   return (
     <Card title="balance">
@@ -58,10 +60,10 @@ export function GridBalanceWidget() {
             </div>
           </div>
 
-          {/* USDT */}
+          {/* quote asset */}
           <div className="py-1">
-            <Row label="USDT free" value={grid.account!.freeBalance} />
-            <Row label="USDT in buys" value={grid.account!.usdtInBuys} />
+            <Row label={`${quoteAsset} free`} value={grid.account!.freeBalance} />
+            <Row label={`${quoteAsset} in buys`} value={grid.account!.usdtInBuys} />
           </div>
 
           {/* base asset */}

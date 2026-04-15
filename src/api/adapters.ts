@@ -7,6 +7,7 @@ import type {
   Order,
   BotMetrics,
 } from '../types'
+import { getQuoteAsset, getBaseAsset } from '../utils/format'
 
 /** Parse "85000 USDT" or "0.00100 BTC" → number */
 function parseAmount(value: string | number | null | undefined): number {
@@ -33,12 +34,14 @@ export function adaptGridBotBalances(raw: GridBotGridResponse): Balance[] {
 
   const freeUsdt = parseAmount(raw.account.freeBalance)
   const lockedUsdt = parseAmount(raw.account.usdtInBuys)
-  const baseAsset = raw.symbol?.replace(/USDT$/i, '') ?? 'BASE'
+  const symbol = raw.symbol ?? ''
+  const quoteAsset = getQuoteAsset(symbol)
+  const baseAsset = getBaseAsset(symbol) || 'BASE'
   const baseInSells = parseAmount(raw.account.baseInSells)
 
   return [
     {
-      asset: 'USDT',
+      asset: quoteAsset,
       free: freeUsdt,
       locked: lockedUsdt,
       total: freeUsdt + lockedUsdt,

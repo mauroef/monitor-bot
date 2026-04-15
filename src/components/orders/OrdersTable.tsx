@@ -25,7 +25,7 @@ export function OrdersTable({ storageKey, orders, showSlTp = false }: OrdersTabl
                 <th className="px-4 pb-2 pt-3 font-medium">Side</th>
                 <th className="px-4 pb-2 pt-3 font-medium text-right">Price</th>
                 <th className="px-4 pb-2 pt-3 font-medium text-right">Qty</th>
-                <th className="px-4 pb-2 pt-3 font-medium text-right">~USDT</th>
+                <th className="px-4 pb-2 pt-3 font-medium text-right">~Value</th>
                 {showSlTp && <th className="px-4 pb-2 pt-3 font-medium text-right">SL</th>}
                 {showSlTp && <th className="px-4 pb-2 pt-3 font-medium text-right">TP</th>}
               </tr>
