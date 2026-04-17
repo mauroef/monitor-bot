@@ -150,7 +150,7 @@ function makeCycleTooltip(quoteAsset: string) {
 function CyclesPnLChart({ cycles, symbol }: { cycles: GridBotGridResponse['recentCycles']; symbol: string }) {
   const CycleTooltip = makeCycleTooltip(getQuoteAsset(symbol))
   let cumulative = 0
-  const chartData = cycles.map((c, i) => {
+  const chartData = [...cycles].reverse().map((c, i) => {
     const gross = parseNum(c.grossPnl)
     cumulative = +(cumulative + gross).toFixed(4)
     return {
