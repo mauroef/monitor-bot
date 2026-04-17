@@ -5,15 +5,16 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   ResponsiveContainer,
   ReferenceLine,
   Cell,
 } from 'recharts'
-import { Badge } from '../ui/Badge'
 import { Skeleton } from '../ui/Skeleton'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
+import { Tooltip } from '../ui/Tooltip'
 import { useSignalHistory } from '../../hooks/useSignalHistory'
+import { formatDuration } from '../../utils/format'
 import type { TradeHistoryEntry } from '../../api/signalBot'
 
 function pnlColor(value: string | null) {
@@ -111,7 +112,7 @@ function PnLChart({ data }: { data: TradeHistoryEntry[] }) {
             width={52}
             tickFormatter={(v) => v.toFixed(2)}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+          <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
           <ReferenceLine yAxisId="bar" y={0} stroke="#3f3f46" />
           <Bar yAxisId="bar" dataKey="net" maxBarSize={24} radius={[2, 2, 0, 0]}>
             {chartData.map((entry, i) => (
@@ -174,7 +175,6 @@ export function TradeHistoryCard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-zinc-800 text-left text-xs text-zinc-500">
-                  <th className="px-4 py-2 font-medium">Side</th>
                   <th className="px-4 py-2 font-medium text-right">Entry</th>
                   <th className="px-4 py-2 font-medium text-right">Close</th>
                   <th className="px-4 py-2 font-medium text-right">Qty</th>
@@ -187,13 +187,14 @@ export function TradeHistoryCard() {
               <tbody className="divide-y divide-zinc-800/50">
                 {[...data].reverse().map((t) => (
                   <tr key={t.id} className="text-zinc-300 hover:bg-zinc-800/30">
-                    <td className="px-4 py-2">
-                      <Badge variant={t.side.toLowerCase() === 'buy' ? 'green' : 'red'}>
-                        {t.side.toUpperCase()}
-                      </Badge>
-                    </td>
                     <td className="px-4 py-2 text-right font-mono">{stripUnit(t.entryPrice)}</td>
-                    <td className="px-4 py-2 text-right font-mono">{stripUnit(t.closePrice)}</td>
+                    <td className="px-4 py-2 text-right font-mono">
+                      <Tooltip content={`held ${formatDuration(t.openedAt, t.closedAt)}`}>
+                        <span className="cursor-default underline decoration-dotted decoration-zinc-600 underline-offset-2">
+                          {stripUnit(t.closePrice)}
+                        </span>
+                      </Tooltip>
+                    </td>
                     <td className="px-4 py-2 text-right font-mono">{stripUnit(t.qty)}</td>
                     <td className="px-4 py-2 text-right font-mono text-zinc-400">
                       {stripUnit(t.notionalUsdt)}
