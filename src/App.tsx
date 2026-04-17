@@ -8,6 +8,7 @@ import { OrdersTable } from './components/orders/OrdersTable'
 import { MetricsPanel } from './components/metrics/MetricsPanel'
 import { CardSkeleton } from './components/ui/Skeleton'
 import { GridCard } from './components/grid/GridCard'
+import { GridTradeHistoryCard } from './components/history/GridTradeHistoryCard'
 import { GridBotLogCard, SignalBotLogCard } from './components/logs/BotLogCard'
 import { TradeHistoryCard } from './components/history/TradeHistoryCard'
 import { GridResetButton } from './components/bots/GridResetButton'
@@ -46,6 +47,7 @@ export default function App() {
                 <MetricsPanel key={m.botType} metrics={m} />
               ))}
             <GridCard />
+            <GridTradeHistoryCard />
             <GridBotLogCard />
             <OrdersTable storageKey="orders-grid" orders={data.openOrders.filter((o) => o.botType === 'grid')} />
           </BotSection>

@@ -1,27 +1,11 @@
-import {
-  ComposedChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { Skeleton } from '../ui/Skeleton'
 import { useGridBalance } from '../../hooks/useGridBalance'
 import type { GridBotGridResponse } from '../../types'
-import { getQuoteAsset } from '../../utils/format'
 
 function parseNum(str: string | null | undefined): number {
   if (!str) return 0
   return parseFloat(str) || 0
-}
-
-function shortDate(value: string) {
-  return value.slice(5, 16)
 }
 
 // ─── Price Ladder ─────────────────────────────────────────────────────────────
@@ -125,107 +109,6 @@ function PriceLadder({
   )
 }
 
-// ─── Cycles PnL Chart ─────────────────────────────────────────────────────────
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeCycleTooltip(quoteAsset: string) {
-  return function CycleTooltip({ active, payload, label }: any) {
-    if (!active || !payload?.length) return null
-    const gross: number = payload.find((p: any) => p.dataKey === 'gross')?.value ?? 0
-    const cum: number = payload.find((p: any) => p.dataKey === 'cumulative')?.value ?? 0
-    return (
-      <div className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs shadow-lg">
-        <p className="mb-1 text-zinc-400">{label}</p>
-        <p className={gross >= 0 ? 'text-emerald-400' : 'text-red-400'}>
-          Cycle: {gross >= 0 ? '+' : ''}{gross.toFixed(4)} {quoteAsset}
-        </p>
-        <p className={cum >= 0 ? 'text-emerald-300' : 'text-red-300'}>
-          Cumulative: {cum >= 0 ? '+' : ''}{cum.toFixed(4)} {quoteAsset}
-        </p>
-      </div>
-    )
-  }
-}
-
-function CyclesPnLChart({ cycles, symbol }: { cycles: GridBotGridResponse['recentCycles']; symbol: string }) {
-  const CycleTooltip = makeCycleTooltip(getQuoteAsset(symbol))
-  let cumulative = 0
-  const chartData = [...cycles].reverse().map((c, i) => {
-    const gross = parseNum(c.grossPnl)
-    cumulative = +(cumulative + gross).toFixed(4)
-    return {
-      label: c.completedAt ? shortDate(c.completedAt) : `#${i + 1}`,
-      gross: +gross.toFixed(4),
-      cumulative,
-    }
-  })
-
-  const allGross = chartData.map((d) => d.gross)
-  const maxAbs = Math.max(...allGross.map(Math.abs), 0.001)
-  const barDomain: [number, number] = [-maxAbs * 1.3, maxAbs * 1.3]
-
-  return (
-    <div className="border-t border-zinc-800 px-4 pb-2 pt-4">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-500">
-        Recent cycles
-      </p>
-      <ResponsiveContainer width="100%" height={180}>
-        <ComposedChart data={chartData} margin={{ top: 4, right: 8, left: 8, bottom: 4 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-          <XAxis
-            dataKey="label"
-            tick={{ fill: '#71717a', fontSize: 10 }}
-            tickLine={false}
-            axisLine={false}
-            interval="preserveStartEnd"
-          />
-          <YAxis
-            yAxisId="bar"
-            domain={barDomain}
-            tick={{ fill: '#71717a', fontSize: 10 }}
-            tickLine={false}
-            axisLine={false}
-            width={52}
-            tickFormatter={(v) => v.toFixed(3)}
-          />
-          <YAxis
-            yAxisId="line"
-            orientation="right"
-            tick={{ fill: '#71717a', fontSize: 10 }}
-            tickLine={false}
-            axisLine={false}
-            width={52}
-            tickFormatter={(v) => v.toFixed(3)}
-          />
-          <Tooltip content={<CycleTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-          <Bar yAxisId="bar" dataKey="gross" maxBarSize={24} radius={[2, 2, 0, 0]}>
-            {chartData.map((entry, i) => (
-              <Cell key={i} fill={entry.gross >= 0 ? '#10b981' : '#ef4444'} fillOpacity={0.75} />
-            ))}
-          </Bar>
-          <Line
-            yAxisId="line"
-            type="monotone"
-            dataKey="cumulative"
-            stroke="#34d399"
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ r: 4, fill: '#34d399', strokeWidth: 0 }}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
-      <div className="mt-1 flex items-center justify-center gap-6 text-xs text-zinc-500">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2 w-3 rounded-sm bg-emerald-500/70" /> cycle PnL
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-0.5 w-4 bg-emerald-400" /> cumulative
-        </span>
-      </div>
-    </div>
-  )
-}
-
 // ─── Card ─────────────────────────────────────────────────────────────────────
 
 export function GridCard() {
@@ -263,7 +146,6 @@ export function GridCard() {
               <PriceLadder grid={grid.grid} levels={grid.levels} currentPrice={grid.currentPrice} />
             )
           )}
-          {grid.recentCycles.length > 0 && <CyclesPnLChart cycles={grid.recentCycles} symbol={grid.symbol} />}
         </>
       )}
     </CollapsibleCard>
