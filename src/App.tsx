@@ -48,8 +48,8 @@ export default function App() {
               ))}
             <GridCard />
             <GridTradeHistoryCard />
-            <GridBotLogCard />
             <OrdersTable storageKey="orders-grid" orders={data.openOrders.filter((o) => o.botType === 'grid')} />
+            <GridBotLogCard />
           </BotSection>
 
           <BotSection
@@ -71,9 +71,9 @@ export default function App() {
               .map((m) => (
                 <MetricsPanel key={m.botType} metrics={m} />
               ))}
-            <SignalBotLogCard />
             <OrdersTable storageKey="orders-signal" orders={data.openOrders.filter((o) => o.botType === 'signal')} showSlTp />
             <TradeHistoryCard />
+            <SignalBotLogCard />
           </BotSection>
         </div>
       ) : null}
