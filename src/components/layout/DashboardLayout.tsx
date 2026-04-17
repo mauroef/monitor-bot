@@ -19,19 +19,23 @@ function Clock() {
 
 interface DashboardLayoutProps {
   children: React.ReactNode
+  headerActions?: React.ReactNode
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children, headerActions }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       <header className="border-b border-zinc-800 px-6 py-4">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           <h1 className="text-lg font-semibold tracking-tight">
             <a href="/" className="hover:opacity-80 transition-opacity">
               <span className="text-emerald-400">●</span> monitor-bot
             </a>
           </h1>
-          <RefreshBar />
+          <div className="flex items-center gap-3">
+            {headerActions}
+            <RefreshBar />
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
