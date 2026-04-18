@@ -1,3 +1,4 @@
+import { Wallet } from 'lucide-react'
 import { useSignalBalance } from '../../hooks/useSignalBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
@@ -21,7 +22,7 @@ export function BalanceWidget() {
   const baseLocked = balance ? String(balance[`${baseAsset}Locked`] ?? '—') : '—'
 
   return (
-    <Card title="balance">
+    <Card title="balance" icon={<Wallet className="size-3.5" />}>
       {isLoading ? (
         <div className="space-y-3 pt-1">
           {Array.from({ length: 5 }).map((_, i) => (

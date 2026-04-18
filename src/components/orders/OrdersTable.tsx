@@ -1,3 +1,4 @@
+import { ListOrdered } from 'lucide-react'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { Badge } from '../ui/Badge'
 import type { Order } from '../../types'
@@ -13,6 +14,7 @@ export function OrdersTable({ storageKey, orders, showSlTp = false }: OrdersTabl
     <CollapsibleCard
       storageKey={storageKey}
       title="open orders"
+      icon={<ListOrdered className="size-3.5" />}
       meta={`${orders.length} orders`}
     >
       {orders.length === 0 ? (

@@ -1,3 +1,4 @@
+import { LayoutGrid } from 'lucide-react'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { Skeleton } from '../ui/Skeleton'
 import { Tooltip } from '../ui/Tooltip'
@@ -125,7 +126,7 @@ export function GridCard() {
     : undefined
 
   return (
-    <CollapsibleCard storageKey="grid-card" title="grid" meta={meta}>
+    <CollapsibleCard storageKey="grid-card" title="grid" icon={<LayoutGrid className="size-3.5" />} meta={meta}>
       {isLoading ? (
         <div className="space-y-2 p-4">
           {Array.from({ length: 5 }).map((_, i) => (

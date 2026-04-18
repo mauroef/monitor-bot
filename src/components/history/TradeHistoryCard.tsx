@@ -10,6 +10,7 @@ import {
   ReferenceLine,
   Cell,
 } from 'recharts'
+import { History } from 'lucide-react'
 import { Skeleton } from '../ui/Skeleton'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { Tooltip } from '../ui/Tooltip'
@@ -27,6 +28,21 @@ function pnlColor(value: string | null) {
 function stripUnit(value: string | null) {
   if (!value) return '—'
   return value.replace(/\s+(USDT|BTC|ETH|SOL|BNB)$/i, '')
+}
+
+function priceDiffTooltip(entry: string | null, close: string | null): import('react').ReactNode {
+  const e = parseFloat(entry ?? '')
+  const c = parseFloat(close ?? '')
+  if (!e || !c) return null
+  const diff = c - e
+  const pct = (diff / e) * 100
+  const sign = diff >= 0 ? '+' : ''
+  const color = diff >= 0 ? '#34d399' : '#f87171'
+  return (
+    <span style={{ color }}>
+      {sign}{diff.toFixed(2)} ({sign}{pct.toFixed(2)}%)
+    </span>
+  )
 }
 
 function parseNet(value: string | null): number {
@@ -153,6 +169,7 @@ export function TradeHistoryCard() {
     <CollapsibleCard
       storageKey="history-signal"
       title="trade history"
+      icon={<History className="size-3.5" />}
       meta={data?.length ? `${data.length} trades` : undefined}
       defaultOpen={false}
     >
@@ -189,7 +206,7 @@ export function TradeHistoryCard() {
                   <tr key={t.id} className="text-zinc-300 hover:bg-zinc-800/30">
                     <td className="px-4 py-2 text-right font-mono">{stripUnit(t.entryPrice)}</td>
                     <td className="px-4 py-2 text-right font-mono">
-                      <Tooltip content={`held ${formatDuration(t.openedAt, t.closedAt)}`}>
+                      <Tooltip content={priceDiffTooltip(t.entryPrice, t.closePrice)}>
                         <span className="cursor-default underline decoration-dotted decoration-zinc-600 underline-offset-2">
                           {stripUnit(t.closePrice)}
                         </span>
@@ -203,7 +220,13 @@ export function TradeHistoryCard() {
                       {stripUnit(t.pnl.net)}
                     </td>
                     <td className="px-4 py-2 font-mono text-xs text-zinc-500">{t.openedAt}</td>
-                    <td className="px-4 py-2 font-mono text-xs text-zinc-500">{t.closedAt}</td>
+                    <td className="px-4 py-2 font-mono text-xs text-zinc-500">
+                      <Tooltip content={`held ${formatDuration(t.openedAt, t.closedAt)}`}>
+                        <span className="cursor-default underline decoration-dotted decoration-zinc-600 underline-offset-2">
+                          {t.closedAt}
+                        </span>
+                      </Tooltip>
+                    </td>
                   </tr>
                 ))}
               </tbody>

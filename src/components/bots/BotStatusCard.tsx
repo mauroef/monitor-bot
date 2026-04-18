@@ -1,3 +1,4 @@
+import { Activity } from 'lucide-react'
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
 import type { BotStatus } from '../../types'
@@ -16,7 +17,7 @@ interface BotStatusCardProps {
 
 export function BotStatusCard({ bot }: BotStatusCardProps) {
   return (
-    <Card title="status">
+    <Card title="status" icon={<Activity className="size-3.5" />}>
       <div className="flex items-start justify-between gap-2">
         <p className="text-xl font-bold text-white capitalize">{bot.botId}-bot</p>
         <Badge variant={statusVariant(bot.status)}>{bot.status}</Badge>

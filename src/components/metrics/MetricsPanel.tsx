@@ -1,3 +1,4 @@
+import { BarChart3 } from 'lucide-react'
 import { Card } from '../ui/Card'
 import type { BotMetrics } from '../../types'
 
@@ -15,7 +16,7 @@ const PNL_KEYS = ['totalNetPnl', 'totalGrossPnl']
 
 export function MetricsPanel({ metrics }: MetricsPanelProps) {
   return (
-    <Card title="metrics">
+    <Card title="metrics" icon={<BarChart3 className="size-3.5" />}>
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3">
         {Object.entries(metrics.metrics).map(([key, value]) => (
           <div key={key}>

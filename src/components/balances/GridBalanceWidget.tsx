@@ -1,3 +1,4 @@
+import { Wallet } from 'lucide-react'
 import { useGridBalance } from '../../hooks/useGridBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
@@ -26,7 +27,7 @@ export function GridBalanceWidget() {
   const baseAsset = grid?.symbol ? getBaseAsset(grid.symbol) : 'BASE'
 
   return (
-    <Card title="balance">
+    <Card title="balance" icon={<Wallet className="size-3.5" />}>
       {isLoading ? (
         <div className="space-y-3 pt-1">
           {Array.from({ length: 5 }).map((_, i) => (

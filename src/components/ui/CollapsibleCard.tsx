@@ -18,6 +18,7 @@ const Chevron = ({ open }: { open: boolean }) => (
 interface CollapsibleCardProps {
   storageKey: string
   title: string
+  icon?: React.ReactNode
   meta?: React.ReactNode
   defaultOpen?: boolean
   /** Called when the panel transitions from closed → open */
@@ -28,6 +29,7 @@ interface CollapsibleCardProps {
 export function CollapsibleCard({
   storageKey,
   title,
+  icon,
   meta,
   defaultOpen = true,
   onOpen,
@@ -48,6 +50,7 @@ export function CollapsibleCard({
         className="flex w-full items-center gap-2 px-4 py-3 text-left transition-colors hover:bg-zinc-800/50"
       >
         <Chevron open={open} />
+        {icon && <span className="text-zinc-500">{icon}</span>}
         <span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
           {title}
         </span>

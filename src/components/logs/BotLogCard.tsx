@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { ScrollText } from 'lucide-react'
 import { Skeleton } from '../ui/Skeleton'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { useGridLogs, useSignalLogs, levelColor, formatLogData } from '../../hooks/useBotLog'
@@ -72,6 +73,7 @@ function LogContainer({
     <CollapsibleCard
       storageKey={storageKey}
       title="log"
+      icon={<ScrollText className="size-3.5" />}
       meta={entries?.length ? `${entries.length} entries` : undefined}
       onOpen={scrollToBottom}
     >

@@ -10,6 +10,7 @@ import {
   ReferenceLine,
   Cell,
 } from 'recharts'
+import { RefreshCw } from 'lucide-react'
 import { Skeleton } from '../ui/Skeleton'
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { useGridBalance } from '../../hooks/useGridBalance'
@@ -147,6 +148,7 @@ export function GridTradeHistoryCard() {
     <CollapsibleCard
       storageKey="history-grid"
       title="cycle history"
+      icon={<RefreshCw className="size-3.5" />}
       meta={cycles.length ? `${cycles.length} recent cycles` : undefined}
       defaultOpen={false}
     >
