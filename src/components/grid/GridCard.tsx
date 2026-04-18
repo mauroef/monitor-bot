@@ -59,13 +59,11 @@ function PriceLadder({
                 <div
                   className={`flex-1 border-t border-dashed ${isBuy ? 'border-emerald-500/60' : 'border-red-500/60'}`}
                 />
-                <Tooltip content={`${l.qty} · placed ${l.placedAt.slice(11, 16)}`} placement="top-left">
-                  <span
-                    className={`w-8 shrink-0 cursor-default text-xs font-medium ${isBuy ? 'text-emerald-400' : 'text-red-400'}`}
-                  >
-                    {l.side}
-                  </span>
-                </Tooltip>
+                <span
+                  className={`w-8 shrink-0 text-xs font-medium ${isBuy ? 'text-emerald-400' : 'text-red-400'}`}
+                >
+                  {l.side}
+                </span>
               </div>
             )
           })}
@@ -80,24 +78,15 @@ function PriceLadder({
               {current.toFixed(2)}
             </span>
             <div className="flex-1 border-t-2 border-yellow-400/80" />
-            <Tooltip
-              content={
+            <span
+              className={`w-8 shrink-0 text-xs font-medium ${
                 coincidentLevel
-                  ? `${coincidentLevel.qty} · placed ${coincidentLevel.placedAt.slice(11, 16)}`
-                  : 'Current market price'
-              }
-              placement="top-left"
+                  ? coincidentLevel.side === 'BUY' ? 'text-emerald-400' : 'text-red-400'
+                  : 'text-center text-yellow-400'
+              }`}
             >
-              <span
-                className={`w-8 shrink-0 cursor-default text-xs font-medium ${
-                  coincidentLevel
-                    ? coincidentLevel.side === 'BUY' ? 'text-emerald-400' : 'text-red-400'
-                    : 'text-center text-yellow-400'
-                }`}
-              >
-                {coincidentLevel ? coincidentLevel.side : '●'}
-              </span>
-            </Tooltip>
+              {coincidentLevel ? coincidentLevel.side : '●'}
+            </span>
           </div>
         )}
       </div>
