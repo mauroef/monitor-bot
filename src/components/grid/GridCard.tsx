@@ -59,7 +59,7 @@ function PriceLadder({
                 <div
                   className={`flex-1 border-t border-dashed ${isBuy ? 'border-emerald-500/60' : 'border-red-500/60'}`}
                 />
-                <Tooltip content={`${l.qty} · placed ${l.placedAt.slice(11, 16)}`}>
+                <Tooltip content={`${l.qty} · placed ${l.placedAt.slice(11, 16)}`} placement="top-left">
                   <span
                     className={`w-8 shrink-0 cursor-default text-xs font-medium ${isBuy ? 'text-emerald-400' : 'text-red-400'}`}
                   >
@@ -86,6 +86,7 @@ function PriceLadder({
                   ? `${coincidentLevel.qty} · placed ${coincidentLevel.placedAt.slice(11, 16)}`
                   : 'Current market price'
               }
+              placement="top-left"
             >
               <span
                 className={`w-8 shrink-0 cursor-default text-xs font-medium ${
