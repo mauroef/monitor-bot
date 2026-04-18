@@ -77,18 +77,14 @@ function PriceLadder({
               {current.toFixed(2)}
             </span>
             <div className="flex-1 border-t-2 border-yellow-400/80" />
-            <span className="w-8 shrink-0 text-center text-xs">
-              {coincidentLevel ? (
-                <span
-                  className={
-                    coincidentLevel.side === 'BUY' ? 'text-emerald-400' : 'text-red-400'
-                  }
-                >
-                  {coincidentLevel.side}
-                </span>
-              ) : (
-                <span className="text-yellow-400">●</span>
-              )}
+            <span
+              className={`w-8 shrink-0 text-xs font-medium ${
+                coincidentLevel
+                  ? coincidentLevel.side === 'BUY' ? 'text-emerald-400' : 'text-red-400'
+                  : 'text-center text-yellow-400'
+              }`}
+            >
+              {coincidentLevel ? coincidentLevel.side : '●'}
             </span>
           </div>
         )}
