@@ -1,5 +1,6 @@
 import { CollapsibleCard } from '../ui/CollapsibleCard'
 import { Skeleton } from '../ui/Skeleton'
+import { Tooltip } from '../ui/Tooltip'
 import { useGridBalance } from '../../hooks/useGridBalance'
 import type { GridBotGridResponse } from '../../types'
 
@@ -58,11 +59,13 @@ function PriceLadder({
                 <div
                   className={`flex-1 border-t border-dashed ${isBuy ? 'border-emerald-500/60' : 'border-red-500/60'}`}
                 />
-                <span
-                  className={`w-8 shrink-0 text-xs font-medium ${isBuy ? 'text-emerald-400' : 'text-red-400'}`}
-                >
-                  {l.side}
-                </span>
+                <Tooltip content={`${l.qty} · placed ${l.placedAt.slice(11, 16)}`}>
+                  <span
+                    className={`w-8 shrink-0 cursor-default text-xs font-medium ${isBuy ? 'text-emerald-400' : 'text-red-400'}`}
+                  >
+                    {l.side}
+                  </span>
+                </Tooltip>
               </div>
             )
           })}
@@ -77,29 +80,43 @@ function PriceLadder({
               {current.toFixed(2)}
             </span>
             <div className="flex-1 border-t-2 border-yellow-400/80" />
-            <span
-              className={`w-8 shrink-0 text-xs font-medium ${
+            <Tooltip
+              content={
                 coincidentLevel
-                  ? coincidentLevel.side === 'BUY' ? 'text-emerald-400' : 'text-red-400'
-                  : 'text-center text-yellow-400'
-              }`}
+                  ? `${coincidentLevel.qty} · placed ${coincidentLevel.placedAt.slice(11, 16)}`
+                  : 'Current market price'
+              }
             >
-              {coincidentLevel ? coincidentLevel.side : '●'}
-            </span>
+              <span
+                className={`w-8 shrink-0 cursor-default text-xs font-medium ${
+                  coincidentLevel
+                    ? coincidentLevel.side === 'BUY' ? 'text-emerald-400' : 'text-red-400'
+                    : 'text-center text-yellow-400'
+                }`}
+              >
+                {coincidentLevel ? coincidentLevel.side : '●'}
+              </span>
+            </Tooltip>
           </div>
         )}
       </div>
 
       <div className="mt-2 flex items-center justify-center gap-6 text-xs text-zinc-500">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-4 border-t border-dashed border-emerald-500/60" /> BUY
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-4 border-t border-dashed border-red-500/60" /> SELL
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-0.5 w-4 bg-yellow-400/80" /> price
-        </span>
+        <Tooltip content="Pending buy order — executes when price drops to this level">
+          <span className="flex cursor-default items-center gap-1.5">
+            <span className="inline-block w-4 border-t border-dashed border-emerald-500/60" /> BUY
+          </span>
+        </Tooltip>
+        <Tooltip content="Pending sell order — executes when price rises to this level">
+          <span className="flex cursor-default items-center gap-1.5">
+            <span className="inline-block w-4 border-t border-dashed border-red-500/60" /> SELL
+          </span>
+        </Tooltip>
+        <Tooltip content="Current market price">
+          <span className="flex cursor-default items-center gap-1.5">
+            <span className="inline-block h-0.5 w-4 bg-yellow-400/80" /> price
+          </span>
+        </Tooltip>
       </div>
     </div>
   )
