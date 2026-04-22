@@ -191,3 +191,13 @@ export interface SignalBotBalanceResponse {
   // dynamic key: BTCFree, ETHFree, etc.
   [key: string]: unknown
 }
+
+export interface GridBotBalanceResponse {
+  symbol: string
+  currentPrice: string
+  quoteFree: string
+  quoteLocked: string
+  baseFree: string
+  baseLocked: string
+  totalPortfolio: string
+}

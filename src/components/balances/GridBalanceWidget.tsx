@@ -1,5 +1,6 @@
 import { Wallet } from 'lucide-react'
 import { useGridBalance } from '../../hooks/useGridBalance'
+import { useGridLiveBalance } from '../../hooks/useGridLiveBalance'
 import { Card } from '../ui/Card'
 import { Skeleton } from '../ui/Skeleton'
 import { CoinIcon } from '../ui/CoinIcon'
@@ -16,6 +17,7 @@ function Row({ label, value }: { label: string; value: string }) {
 
 export function GridBalanceWidget() {
   const { data: grid, isLoading, error } = useGridBalance()
+  const { data: live } = useGridLiveBalance()
 
   const notInitialized =
     !grid ||
@@ -25,6 +27,13 @@ export function GridBalanceWidget() {
     !grid.grid
   const quoteAsset = grid?.symbol ? getQuoteAsset(grid.symbol) : 'USDT'
   const baseAsset = grid?.symbol ? getBaseAsset(grid.symbol) : 'BASE'
+
+  const currentPrice = live?.currentPrice ?? grid?.currentPrice
+  const quoteFree    = live?.quoteFree    ?? grid?.account?.freeBalance
+  const quoteLocked  = live?.quoteLocked  ?? grid?.account?.usdtInBuys
+  const baseFree     = live?.baseFree     ?? null
+  const baseLocked   = live?.baseLocked   ?? grid?.account?.baseInSells
+  const totalPortfolio = live?.totalPortfolio ?? grid?.account?.totalPortfolio
 
   return (
     <Card title="balance" icon={<Wallet className="size-3.5" />}>
@@ -48,8 +57,8 @@ export function GridBalanceWidget() {
             <p className="text-xs text-zinc-500">{grid.symbol}</p>
             <div className="mt-1.5 flex items-center gap-2">
               <CoinIcon asset={baseAsset} className="size-8 shrink-0" />
-              {grid.currentPrice ? (
-                <p className="text-2xl font-bold tabular-nums text-white">{grid.currentPrice}</p>
+              {currentPrice ? (
+                <p className="text-2xl font-bold tabular-nums text-white">{currentPrice}</p>
               ) : (
                 <p className="text-sm text-zinc-400">
                   Grid{' '}
@@ -61,24 +70,21 @@ export function GridBalanceWidget() {
             </div>
           </div>
 
-          {/* quote asset */}
           <div className="py-1">
-            <Row label={`${quoteAsset} free`} value={grid.account!.freeBalance} />
-            <Row label={`${quoteAsset} in buys`} value={grid.account!.usdtInBuys} />
+            {quoteFree   && <Row label={`${quoteAsset} free`}   value={quoteFree} />}
+            {quoteLocked && <Row label={`${quoteAsset} in buys`} value={quoteLocked} />}
           </div>
 
-          {/* base asset */}
           <div className="py-1">
-            <Row label={`${baseAsset} in sells`} value={grid.account!.baseInSells} />
-            <Row label="Capital deployed" value={grid.account!.capitalDeployed} />
+            {baseFree   && <Row label={`${baseAsset} free`}     value={baseFree} />}
+            {baseLocked && <Row label={`${baseAsset} in sells`} value={baseLocked} />}
           </div>
 
-          {/* Total */}
           <div className="pt-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-zinc-300">Total portfolio</span>
               <span className="text-base font-bold text-emerald-400">
-                {grid.account!.totalPortfolio}
+                {totalPortfolio ?? '—'}
               </span>
             </div>
           </div>

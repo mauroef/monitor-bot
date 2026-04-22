@@ -1,4 +1,4 @@
-import type { GridBotStatusResponse, GridBotGridResponse } from '../types'
+import type { GridBotStatusResponse, GridBotGridResponse, GridBotBalanceResponse } from '../types'
 
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`/api/grid${path}`)
@@ -23,6 +23,7 @@ export interface BotLogEntry {
 export const gridBotApi = {
   status: () => get<GridBotStatusResponse>('/status'),
   grid: () => get<GridBotGridResponse>('/grid'),
+  balance: () => get<GridBotBalanceResponse>('/balance'),
   health: () => get<{ status: string; ts: string }>('/health'),
   logs: () => get<BotLogEntry[]>('/logs'),
   reset: () => post<{ ok: boolean; message: string }>('/reset'),
